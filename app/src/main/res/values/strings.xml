@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Zoop Client Sample</string>
+    <string name="home">home</string>
+
+    <string name="sales">Nova Venda</string>
+    <string name="terminals">Maquininhas</string>
+    <string name="others">Outros</string>
 </resources>

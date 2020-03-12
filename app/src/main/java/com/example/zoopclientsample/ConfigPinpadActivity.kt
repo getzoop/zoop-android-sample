@@ -1,6 +1,5 @@
 package com.example.zoopclientsample
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.widget.ListView
@@ -13,10 +12,11 @@ import kotlinx.android.synthetic.main.activity_config_pinpad.*
 import org.json.JSONObject
 import java.util.*
 
-class ConfigPinPadActivity : Activity(), DeviceSelectionListener {
+class ConfigPinPadActivity : BaseActivity() , DeviceSelectionListener {
 
     var terminalListManager: TerminalListManager? = null
     var adapter: SimpleAdapter? = null
+    var lv: ListView? = null
     var arrayListZoopTerminalsListForUI: ArrayList<HashMap<String, Any>>? =
         null
     var iSelectedDeviceIndex = -1
@@ -24,24 +24,38 @@ class ConfigPinPadActivity : Activity(), DeviceSelectionListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_config_pinpad)
-//        setupListView()
-//        observeListView()
-//        terminalListManager = TerminalListManager(this, applicationContext)
-//        terminalListManager!!.startTerminalsDiscovery()
+        lv = findViewById<ListView>(R.id.listViewAvailableTerminals)
+        setupListView()
+        observeListView()
+        terminalListManager = TerminalListManager(this, applicationContext)
+        terminalListManager!!.startTerminalsDiscovery()
     }
 
     private fun setupListView() {
-        listViewAvailableTerminals!!.choiceMode = ListView.CHOICE_MODE_SINGLE
+        lv!!.choiceMode = ListView.CHOICE_MODE_SINGLE
+        arrayListZoopTerminalsListForUI = ArrayList<HashMap<String, Any>>()
         adapter = SimpleAdapter(this,
             arrayListZoopTerminalsListForUI,
             R.layout.item_list_terminals,
             arrayOf("name", "dateTimeDetected"),
             intArrayOf(R.id.textViewTerminalName, R.id.textViewDateTimeDetected))
-        listViewAvailableTerminals!!.adapter = adapter
+        lv!!.adapter = adapter
+    }
+
+    private fun updateListView() {
+        adapter = SimpleAdapter(this,
+            arrayListZoopTerminalsListForUI,
+            R.layout.item_list_terminals,
+            arrayOf("name", "dateTimeDetected"),
+            intArrayOf(R.id.textViewTerminalName, R.id.textViewDateTimeDetected))
+
+        //TODO: adapter.setViewBinder precisa??
+
+        lv!!.adapter = adapter
     }
 
     private fun observeListView() {
-        listViewAvailableTerminals.setOnItemClickListener { parent, view, position, id ->
+        lv?.setOnItemClickListener { _, _, position, _ ->
             iSelectedDeviceIndex = position
 
             val hmSelectedDevice: HashMap<String, Any>? =
@@ -75,11 +89,11 @@ class ConfigPinPadActivity : Activity(), DeviceSelectionListener {
                     }
                     arrayListZoopTerminalsListForUI!!.add(hashMapZoopTerminalStringsForUI)
                 }
-                setupListView()
+                updateListView()
 //                terminalListManager?.requestZoopDeviceSelection(vectorZoopTerminals[0])
             }
             else {
-                listViewAvailableTerminals.visibility = View.GONE
+                lv?.visibility = View.GONE
                 textViewTerminalList.text = "Não há maquininhas disponíveis"
             }
         } catch (e: Exception) {

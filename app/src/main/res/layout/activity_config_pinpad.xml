@@ -9,8 +9,9 @@
         android:id="@+id/textViewTerminalList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="65dp"
         android:text="Selecione uma maquininha da lista"
+        android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -38,8 +39,10 @@
     <ListView
         android:id="@+id/listViewAvailableTerminals"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="5dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10sp"
         app:layout_constraintTop_toBottomOf="@+id/textViewSearching"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>

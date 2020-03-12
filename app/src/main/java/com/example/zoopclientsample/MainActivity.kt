@@ -2,56 +2,39 @@ package com.example.zoopclientsample
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
-import com.google.android.material.navigation.NavigationView
 import com.zoop.zoopandroidsdk.ZoopAPI
+import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseActivity() {
 
-    lateinit var toolbar: Toolbar
-    lateinit var drawerLayout: DrawerLayout
-    lateinit var navView: NavigationView
+    private val TAG = MainActivity::class.java.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        ZoopAPI.initialize(application)
 
-        drawerLayout = findViewById(R.id.drawer_layout)
-        navView = findViewById(R.id.nav_view)
-
-        val toggle = ActionBarDrawerToggle(
-            this, drawerLayout, toolbar, 0, 0
-        )
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-        navView.setNavigationItemSelectedListener(this)
-
-//        ZoopAPI.initialize(application)
-
-    }
-
-    override fun onNavigationItemSelected(p0: MenuItem): Boolean {
-        when (p0.itemId) {
-            R.id.nav_sales -> {
-                Toast.makeText(this, "Nova venda clicked", Toast.LENGTH_SHORT).show()
-            }
-            R.id.nav_terminals -> {
-                Toast.makeText(this, "Maquininhas clicked", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, ConfigPinPadActivity::class.java))
-            }
+        btn_sales.setOnClickListener{
+            Toast.makeText(
+                this,
+                resources.getString(R.string.sales),
+                Toast.LENGTH_SHORT
+            ).show()
         }
-        drawerLayout.closeDrawer(GravityCompat.START)
-        return true
+
+        btn_terminals.setOnClickListener {
+            startActivity(Intent(this, ConfigPinPadActivity::class.java))
+        }
+
+        btn_others.setOnClickListener {
+            Toast.makeText(
+                this,
+                resources.getString(R.string.others),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
 }
