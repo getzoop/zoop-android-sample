@@ -5,4 +5,12 @@
     <string name="sales">Nova Venda</string>
     <string name="terminals">Maquininhas</string>
     <string name="others">Outros</string>
+
+    <string name="label_select_available_terminal">Selecione uma maquininha da lista</string>
+    <string name="bluetooth_discovering_compatible_devices">Procurando maquininha</string>
+
+    <string name="label_no_terminal_available">Não há maquininhas disponíveis</string>
+
+    <string name="button_terminal_configuration_finished">OK</string>
+
 </resources>

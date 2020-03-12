@@ -43,5 +43,5 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
 
-//    implementation files('libs/zoopapi_vx.x.jar')
+    implementation files('libs/zoop_emv_android_sdk_2.0.8_prod.jar')
 }

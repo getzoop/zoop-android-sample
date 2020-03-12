@@ -2,17 +2,16 @@ package com.example.zoopclientsample
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ListView
-import android.widget.SimpleAdapter
-import android.widget.Toast
+import android.widget.*
 import com.zoop.zoopandroidsdk.TerminalListManager
 import com.zoop.zoopandroidsdk.commons.ZLog
 import com.zoop.zoopandroidsdk.terminal.DeviceSelectionListener
-import kotlinx.android.synthetic.main.activity_config_pinpad.*
 import org.json.JSONObject
 import java.util.*
 
 class ConfigPinPadActivity : BaseActivity() , DeviceSelectionListener {
+
+    private val TAG = ConfigPinPadActivity::class.java.simpleName
 
     var terminalListManager: TerminalListManager? = null
     var adapter: SimpleAdapter? = null
@@ -37,8 +36,8 @@ class ConfigPinPadActivity : BaseActivity() , DeviceSelectionListener {
         adapter = SimpleAdapter(this,
             arrayListZoopTerminalsListForUI,
             R.layout.item_list_terminals,
-            arrayOf("name", "dateTimeDetected"),
-            intArrayOf(R.id.textViewTerminalName, R.id.textViewDateTimeDetected))
+            arrayOf("name", "dateTimeDetected", "selected"),
+            intArrayOf(R.id.textViewTerminalName, R.id.textViewDateTimeDetected, R.id.radioButton))
         lv!!.adapter = adapter
     }
 
@@ -46,8 +45,8 @@ class ConfigPinPadActivity : BaseActivity() , DeviceSelectionListener {
         adapter = SimpleAdapter(this,
             arrayListZoopTerminalsListForUI,
             R.layout.item_list_terminals,
-            arrayOf("name", "dateTimeDetected"),
-            intArrayOf(R.id.textViewTerminalName, R.id.textViewDateTimeDetected))
+            arrayOf("name", "dateTimeDetected", "selected"),
+            intArrayOf(R.id.textViewTerminalName, R.id.textViewDateTimeDetected, R.id.radioButton))
 
         //TODO: adapter.setViewBinder precisa??
 
@@ -55,17 +54,15 @@ class ConfigPinPadActivity : BaseActivity() , DeviceSelectionListener {
     }
 
     private fun observeListView() {
-        lv?.setOnItemClickListener { _, _, position, _ ->
+        lv?.setOnItemClickListener { _, view, position, _ ->
             iSelectedDeviceIndex = position
-
-            val hmSelectedDevice: HashMap<String, Any>? =
-                arrayListZoopTerminalsListForUI?.get(iSelectedDeviceIndex)
-            val joZoopDeviceSelectedByClick = hmSelectedDevice?.get("joZoopDevice") as JSONObject
-
-            ZLog.t("Terminal selected by click: $joZoopDeviceSelectedByClick")
-
-            terminalListManager?.requestZoopDeviceSelection(joZoopDeviceSelectedByClick)
-
+            val rb = view.findViewById(R.id.radioButton) as RadioButton
+            if (!rb.isChecked) {
+                val hmSelectedDevice: HashMap<String, Any>? =
+                    arrayListZoopTerminalsListForUI?.get(iSelectedDeviceIndex)
+                val joZoopDeviceSelectedByClick = hmSelectedDevice?.get("joZoopDevice") as JSONObject
+                terminalListManager?.requestZoopDeviceSelection(joZoopDeviceSelectedByClick)
+            }
             Toast.makeText(this, "Terminal selected by click: $position", Toast.LENGTH_SHORT).show()
         }
     }
@@ -76,26 +73,26 @@ class ConfigPinPadActivity : BaseActivity() , DeviceSelectionListener {
     }
 
     override fun showDeviceListForUserSelection(
-        vectorZoopTerminals: Vector<JSONObject?>
+        vectorZoopTerminals: Vector<JSONObject>
     ) {
         try {
-            if (vectorZoopTerminals.size > 0) {
-                arrayListZoopTerminalsListForUI = ArrayList()
-                for (joZoopTerminal in vectorZoopTerminals) {
-                    val hashMapZoopTerminalStringsForUI = HashMap<String, Any>()
-                    if (joZoopTerminal != null) {
-                        hashMapZoopTerminalStringsForUI["name"] = joZoopTerminal.getString("name")
-                        hashMapZoopTerminalStringsForUI["dateTimeDetected"] = joZoopTerminal.getString("dateTimeDetected")
-                    }
-                    arrayListZoopTerminalsListForUI!!.add(hashMapZoopTerminalStringsForUI)
+            val joSelectedZoopTerminalName =
+                TerminalListManager.getCurrentSelectedZoopTerminal()?.getString("name")
+
+            arrayListZoopTerminalsListForUI = ArrayList()
+            for (joZoopTerminal in vectorZoopTerminals) {
+                val hashMapZoopTerminalStringsForUI = HashMap<String, Any>()
+                joZoopTerminal?.let{
+                    val joZoopTerminalCurrentlyName = joZoopTerminal.getString("name")
+                    hashMapZoopTerminalStringsForUI["joZoopDevice"] = joZoopTerminal
+                    hashMapZoopTerminalStringsForUI["name"] = joZoopTerminalCurrentlyName
+                    hashMapZoopTerminalStringsForUI["dateTimeDetected"] = joZoopTerminal.getString("dateTimeDetected")
+                    hashMapZoopTerminalStringsForUI["selected"] = (joZoopTerminalCurrentlyName == joSelectedZoopTerminalName)
                 }
-                updateListView()
+                arrayListZoopTerminalsListForUI!!.add(hashMapZoopTerminalStringsForUI)
+            }
+            updateListView()
 //                terminalListManager?.requestZoopDeviceSelection(vectorZoopTerminals[0])
-            }
-            else {
-                lv?.visibility = View.GONE
-                textViewTerminalList.text = "Não há maquininhas disponíveis"
-            }
         } catch (e: Exception) {
             ZLog.exception(300064, e)
         }
@@ -107,9 +104,15 @@ class ConfigPinPadActivity : BaseActivity() , DeviceSelectionListener {
     ) {
         try {
             val hashMapZoopTerminalStringsForUI = HashMap<String, Any>()
-            if (joNewlyFoundZoopDevice != null) {
-                hashMapZoopTerminalStringsForUI["name"] = joNewlyFoundZoopDevice.getString("name")
+            joNewlyFoundZoopDevice?.let{
+                val joSelectedZoopTerminalName =
+                    TerminalListManager.getCurrentSelectedZoopTerminal().getString("name")
+                val joNewlyFoundZoopDeviceName = joNewlyFoundZoopDevice.getString("name")
+
+                hashMapZoopTerminalStringsForUI["joZoopDevice"] = joNewlyFoundZoopDevice
+                hashMapZoopTerminalStringsForUI["name"] = joNewlyFoundZoopDeviceName
                 hashMapZoopTerminalStringsForUI["dateTimeDetected"] = joNewlyFoundZoopDevice.getString("dateTimeDetected")
+                hashMapZoopTerminalStringsForUI["selected"] = (joNewlyFoundZoopDeviceName == joSelectedZoopTerminalName)
             }
             arrayListZoopTerminalsListForUI!!.add(hashMapZoopTerminalStringsForUI)
             adapter!!.notifyDataSetChanged()
@@ -130,10 +133,12 @@ class ConfigPinPadActivity : BaseActivity() , DeviceSelectionListener {
     ) {
         try {
 //        val namePinpad: String = joZoopSelectedDevice.getString("name")
+            findViewById<Button>(R.id.buttonFinishConfiguration).visibility = View.VISIBLE
             adapter!!.notifyDataSetChanged()
         } catch (e: Exception) {
             ZLog.exception(300056, e)
         }
     }
+
 
 }
