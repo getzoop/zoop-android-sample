@@ -16,12 +16,8 @@ class MainActivity : BaseActivity() {
 
         ZoopAPI.initialize(application)
 
-        btn_sales.setOnClickListener{
-            Toast.makeText(
-                this,
-                resources.getString(R.string.sales),
-                Toast.LENGTH_SHORT
-            ).show()
+        btn_sales.setOnClickListener {
+            startActivity(Intent(this, ChargeActivity::class.java))
         }
 
         btn_terminals.setOnClickListener {

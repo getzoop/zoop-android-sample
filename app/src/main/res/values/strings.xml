@@ -13,4 +13,12 @@
 
     <string name="button_terminal_configuration_finished">OK</string>
 
+    <string name="charge_hint_type_value_with_decimals">Valor da venda</string>
+    <string name="charge_label_choose_payment_action_below">Selecione a opção de pagamento</string>
+    <string name="number_of_installments">Número de parcelas</string>
+
+    <string name="charge_button_credit_only">Crédito</string>
+    <string name="charge_button_charge_credit_with_installments">Crédito Parcelado</string>
+    <string name="charge_button_charge_debit">Débito</string>
+
 </resources>
