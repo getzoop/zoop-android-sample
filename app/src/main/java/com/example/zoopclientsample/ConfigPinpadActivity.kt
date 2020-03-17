@@ -26,6 +26,10 @@ class ConfigPinPadActivity : BaseActivity() , DeviceSelectionListener {
         lv = findViewById<ListView>(R.id.listViewAvailableTerminals)
         setupListView()
         observeListView()
+        val buttonFinishConfiguration = findViewById<Button>(R.id.buttonFinishConfiguration)
+        buttonFinishConfiguration.setOnClickListener {
+            finish()
+        }
         terminalListManager = TerminalListManager(this, applicationContext)
         terminalListManager!!.startTerminalsDiscovery()
     }

@@ -21,4 +21,9 @@
     <string name="charge_button_charge_credit_with_installments">Crédito Parcelado</string>
     <string name="charge_button_charge_debit">Débito</string>
 
+    <string name="button_new_transaction">Nova Venda</string>
+    <string name="charge_button_void_transaction">Cancelar Transação (Estorno)</string>
+    <string name="button_print_receipt_merchant">Visualizar Via Estabelecimento</string>
+    <string name="button_print_receipt_cardholder">Visualizar Via Cliente</string>
+
 </resources>

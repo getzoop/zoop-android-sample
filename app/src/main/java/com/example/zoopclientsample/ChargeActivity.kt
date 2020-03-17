@@ -9,38 +9,66 @@ import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
 import com.zoop.zoopandroidsdk.ZoopTerminalPayment
+import com.zoop.zoopandroidsdk.commons.Extras
+import com.zoop.zoopandroidsdk.commons.ZLog
 import com.zoop.zoopandroidsdk.terminal.*
 import org.json.JSONObject
+import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.*
 
 class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelectionListener,
     ExtraCardInformationListener, ApplicationDisplayListener {
 
+    private val TAG = ChargeActivity::class.java.simpleName
+
     var terminalPayment: ZoopTerminalPayment? = null
+    var sValueToCharge = ""
     var iNumberOfInstallments = 0
 
-    var current = ""
+//    Valores possiveis para paymentOption
+//    0 - Crédito a Vista
+//    1 - Débito
+//    2 - Crédito Parcelado
+    var paymentOption = 0
+
+    var marketplaceId = "insert your marketplaceId here"
+    var sellerId = "insert your sellerId here"
+    var publishableKey: String? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_charge)
+        setupEditText()
         setupButtons()
         setupSpinner()
-        setupEditText()
+        callCharge()
         try {
             terminalPayment = ZoopTerminalPayment()
             terminalPayment!!.setTerminalPaymentListener(this@ChargeActivity)
             terminalPayment!!.setDeviceSelectionListener(this@ChargeActivity)
             terminalPayment!!.setExtraCardInformationListener(this@ChargeActivity)
             terminalPayment!!.setApplicationDisplayListener(this@ChargeActivity)
-//            zoopTerminalPayment.charge(java.math.BigDecimal valueToCharge,
-//                int paymentOption,int iNumberOfInstallments,
-//                java.lang.String marketplaceId,
-//                java.lang.String sellerId,
-//                java.lang.String publishableKey)
         } catch (e : Exception) {
             Log.e("onClick exception", e.toString());
+        }
+    }
+
+    private fun callCharge() {
+        if (sValueToCharge.isNotEmpty()) {
+            var valueToCharge: BigDecimal? = null
+            valueToCharge = Extras.getInstance().getBigDecimalFromMoneyString(sValueToCharge)
+
+            val buttonPay = findViewById<Button>(R.id.btn_pay)
+            buttonPay.setOnClickListener {
+                terminalPayment!!.charge(valueToCharge,
+                    paymentOption,
+                    iNumberOfInstallments,
+                    marketplaceId,
+                    sellerId,
+                    publishableKey)
+            }
         }
     }
 
@@ -54,6 +82,7 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
             spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                     Toast.makeText(this@ChargeActivity,"iNumberOfInstallments selected: ${numberOfInstallmentsOpt[position]}", Toast.LENGTH_SHORT).show()
+                    iNumberOfInstallments = position + 1
                 }
                 override fun onNothingSelected(parent: AdapterView<*>) {
                     // write code to perform some action
@@ -110,12 +139,12 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(s.toString() != current) {
+                if(s.toString() != sValueToCharge) {
                     editTextValueToCharge.removeTextChangedListener(this)
                     val cleanString = s.toString().replace(Regex("[R$.,]"), "").trim()
                     val parsed = cleanString.toDouble()
                     val formatted = NumberFormat.getCurrencyInstance().format(parsed/100)
-                    current = formatted
+                    sValueToCharge = formatted
                     editTextValueToCharge.setText(formatted)
                     editTextValueToCharge.setSelection(formatted.length)
                     editTextValueToCharge.addTextChangedListener(this)
@@ -184,11 +213,11 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun showMessage(p0: String?, p1: TerminalMessageType?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun showMessage(stringMessage: String?, messageType: TerminalMessageType?) {
+        runOnUiThread { showMessage(stringMessage, messageType, null) }
     }
 
-    override fun showMessage(p0: String?, p1: TerminalMessageType?, p2: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun showMessage(stringMessage: String?, messageType: TerminalMessageType?, sExplanation: String?) {
+        runOnUiThread { ZLog.t(677303, stringMessage) }
     }
 }

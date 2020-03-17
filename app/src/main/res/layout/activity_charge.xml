@@ -84,7 +84,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewNumberOfInstallments"/>
 
     <Button
-        android:id="@+id/buttonPay"
+        android:id="@+id/btn_pay"
         style="@style/btnTheme"
         android:text="Pagar"
         android:layout_marginTop="0dp"
