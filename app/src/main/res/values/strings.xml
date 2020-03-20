@@ -11,7 +11,14 @@
 
     <string name="label_no_terminal_available">Não há maquininhas disponíveis</string>
 
+    <string name="permission_alert_title">Permissão de localização necessária</string>
+    <string name="permission_alert_text">Precisamos da permissão para acessar os dados da conexão com a maquininha</string>
+
+    <string name="terminal_incompatible_text">Maquininha Incompatível</string>
+    <string name="terminal_compatible_text">Maquininha Compatível</string>
+    <string name="terminal_partially_compatible_text">Maquininha Parcialmente Compatível</string>
     <string name="button_terminal_configuration_finished">OK</string>
+    <string name="button_terminal_configuration_finished_cancel">Cancelar</string>
 
     <string name="charge_hint_type_value_with_decimals">Valor da venda</string>
     <string name="charge_label_choose_payment_action_below">Selecione a opção de pagamento</string>
