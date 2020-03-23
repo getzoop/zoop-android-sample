@@ -1,74 +1,89 @@
 package com.example.zoopclientsample
 
+import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.ListView
+import android.widget.TextView
+import com.example.zoopclientsample.adapter.TerminalAdapter
+import com.example.zoopclientsample.adapter.TerminalAdapterListener
+import com.example.zoopclientsample.model.TerminalModel
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.listener.multi.DialogOnAnyDeniedMultiplePermissionsListener
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.zoop.zoopandroidsdk.TerminalListManager
+import com.zoop.zoopandroidsdk.commons.TypeTerminalKeyEnum
+import com.zoop.zoopandroidsdk.commons.TypeTerminalKeyErrorEnum
 import com.zoop.zoopandroidsdk.commons.ZLog
 import com.zoop.zoopandroidsdk.terminal.DeviceSelectionListener
+import com.zoop.zoopandroidsdk.terminal.ZoopTerminalKeyValidatorListener
 import org.json.JSONObject
 import java.util.*
 
-class ConfigPinPadActivity : BaseActivity() , DeviceSelectionListener {
+class ConfigPinPadActivity : BaseActivity(), DeviceSelectionListener,
+    ZoopTerminalKeyValidatorListener, TerminalAdapterListener {
 
     private val TAG = ConfigPinPadActivity::class.java.simpleName
 
-    var terminalListManager: TerminalListManager? = null
-    var adapter: SimpleAdapter? = null
-    var lv: ListView? = null
-    var arrayListZoopTerminalsListForUI: ArrayList<HashMap<String, Any>>? =
-        null
-    var iSelectedDeviceIndex = -1
+    private var terminalListManager: TerminalListManager? = null
+    private var terminalAdapter: TerminalAdapter? = null
+    private var lv: ListView? = null
+    private var isCheckingTerminal = false
+    private var buttonFinishConfiguration: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_config_pinpad)
-        lv = findViewById<ListView>(R.id.listViewAvailableTerminals)
         setupListView()
-        observeListView()
-        val buttonFinishConfiguration = findViewById<Button>(R.id.buttonFinishConfiguration)
-        buttonFinishConfiguration.setOnClickListener {
-            finish()
-        }
+        setupButton()
         terminalListManager = TerminalListManager(this, applicationContext)
         terminalListManager!!.startTerminalsDiscovery()
+        callPermissionsListener()
     }
 
     private fun setupListView() {
+        lv = findViewById<ListView>(R.id.listViewAvailableTerminals)
         lv!!.choiceMode = ListView.CHOICE_MODE_SINGLE
-        arrayListZoopTerminalsListForUI = ArrayList<HashMap<String, Any>>()
-        adapter = SimpleAdapter(this,
-            arrayListZoopTerminalsListForUI,
-            R.layout.item_list_terminals,
-            arrayOf("name", "dateTimeDetected", "selected"),
-            intArrayOf(R.id.textViewTerminalName, R.id.textViewDateTimeDetected, R.id.radioButton))
-        lv!!.adapter = adapter
+        terminalAdapter = TerminalAdapter(this, R.layout.item_list_terminals, this)
+        lv!!.adapter = terminalAdapter
     }
 
-    private fun updateListView() {
-        adapter = SimpleAdapter(this,
-            arrayListZoopTerminalsListForUI,
-            R.layout.item_list_terminals,
-            arrayOf("name", "dateTimeDetected", "selected"),
-            intArrayOf(R.id.textViewTerminalName, R.id.textViewDateTimeDetected, R.id.radioButton))
-
-        //TODO: adapter.setViewBinder precisa??
-
-        lv!!.adapter = adapter
-    }
-
-    private fun observeListView() {
-        lv?.setOnItemClickListener { _, view, position, _ ->
-            iSelectedDeviceIndex = position
-            val rb = view.findViewById(R.id.radioButton) as RadioButton
-            if (!rb.isChecked) {
-                val hmSelectedDevice: HashMap<String, Any>? =
-                    arrayListZoopTerminalsListForUI?.get(iSelectedDeviceIndex)
-                val joZoopDeviceSelectedByClick = hmSelectedDevice?.get("joZoopDevice") as JSONObject
-                terminalListManager?.requestZoopDeviceSelection(joZoopDeviceSelectedByClick)
+    private fun setupButton() {
+        buttonFinishConfiguration = findViewById<Button>(R.id.buttonFinishConfiguration)
+        buttonFinishConfiguration?.let{
+            it.setOnClickListener {
+                if (isCheckingTerminal) {
+                    //abort terminal compatibility checking
+                    terminalListManager!!.interruptCurrentThreadThatCheckTerminalCompatibility()
+                    buttonFinishConfiguration!!.setText(R.string.button_terminal_configuration_finished)
+                    isCheckingTerminal = false
+                } else {
+                    val chargeIntent = Intent(this@ConfigPinPadActivity, ChargeActivity::class.java)
+                    startActivity(chargeIntent)
+                    finish()
+                }
             }
-            Toast.makeText(this, "Terminal selected by click: $position", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun callPermissionsListener() {
+        val dialogMultiplePermissionsListener: MultiplePermissionsListener =
+            DialogOnAnyDeniedMultiplePermissionsListener.Builder
+                .withContext(this)
+                .withTitle(R.string.permission_alert_title)
+                .withMessage(R.string.permission_alert_text)
+                .withButtonText(android.R.string.ok)
+                .build()
+
+        Dexter.withActivity(this)
+            .withPermissions(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            .withListener(dialogMultiplePermissionsListener)
+            .check()
     }
 
     override fun onDestroy() {
@@ -77,26 +92,40 @@ class ConfigPinPadActivity : BaseActivity() , DeviceSelectionListener {
     }
 
     override fun showDeviceListForUserSelection(
-        vectorZoopTerminals: Vector<JSONObject>
+        vectorZoopTerminals: Vector<JSONObject>?
     ) {
         try {
-            val joSelectedZoopTerminalName =
-                TerminalListManager.getCurrentSelectedZoopTerminal()?.getString("name")
-
-            arrayListZoopTerminalsListForUI = ArrayList()
-            for (joZoopTerminal in vectorZoopTerminals) {
-                val hashMapZoopTerminalStringsForUI = HashMap<String, Any>()
-                joZoopTerminal?.let{
-                    val joZoopTerminalCurrentlyName = joZoopTerminal.getString("name")
-                    hashMapZoopTerminalStringsForUI["joZoopDevice"] = joZoopTerminal
-                    hashMapZoopTerminalStringsForUI["name"] = joZoopTerminalCurrentlyName
-                    hashMapZoopTerminalStringsForUI["dateTimeDetected"] = joZoopTerminal.getString("dateTimeDetected")
-                    hashMapZoopTerminalStringsForUI["selected"] = (joZoopTerminalCurrentlyName == joSelectedZoopTerminalName)
+            val labelTerminalList = findViewById<TextView>(R.id.textViewTerminalList)
+            if (vectorZoopTerminals == null) {
+                lv = findViewById<ListView>(R.id.listViewAvailableTerminals)
+                lv?.let {
+                    it.visibility = View.GONE
                 }
-                arrayListZoopTerminalsListForUI!!.add(hashMapZoopTerminalStringsForUI)
+                labelTerminalList?.let {
+                    it.text = resources.getString(R.string.label_no_terminal_available)
+                }
+                return
+            } else {
+                labelTerminalList?.let {
+                    it.text = resources.getString(R.string.label_select_available_terminal)
+                }
             }
-            updateListView()
-//                terminalListManager?.requestZoopDeviceSelection(vectorZoopTerminals[0])
+            //parsing JSON object terminal vector to terminal model list
+            val terminalModels = ArrayList<TerminalModel>()
+            for (joZoopTerminal in vectorZoopTerminals) {
+                val model = TerminalModel(joZoopTerminal)
+                var isSelected = false
+                val uri = joZoopTerminal.getString("uri")
+                val joSelectedZoopTerminal = TerminalListManager.getCurrentSelectedZoopTerminal()
+                isSelected = if (joSelectedZoopTerminal?.getString("uri") != null) {
+                    0 == uri.compareTo(joSelectedZoopTerminal.getString("uri"))
+                } else {
+                    false
+                }
+                model.selected = isSelected
+                terminalModels.add(model)
+            }
+            terminalAdapter?.setTerminalList(terminalModels)
         } catch (e: Exception) {
             ZLog.exception(300064, e)
         }
@@ -107,20 +136,19 @@ class ConfigPinPadActivity : BaseActivity() , DeviceSelectionListener {
         vectorZoopTerminals: Vector<JSONObject?>?, iNewlyFoundDeviceIndex: Int
     ) {
         try {
-            val hashMapZoopTerminalStringsForUI = HashMap<String, Any>()
-            joNewlyFoundZoopDevice?.let{
-                val joSelectedZoopTerminalName =
-                    TerminalListManager.getCurrentSelectedZoopTerminal().getString("name")
-                val joNewlyFoundZoopDeviceName = joNewlyFoundZoopDevice.getString("name")
-
-                hashMapZoopTerminalStringsForUI["joZoopDevice"] = joNewlyFoundZoopDevice
-                hashMapZoopTerminalStringsForUI["name"] = joNewlyFoundZoopDeviceName
-                hashMapZoopTerminalStringsForUI["dateTimeDetected"] = joNewlyFoundZoopDevice.getString("dateTimeDetected")
-                hashMapZoopTerminalStringsForUI["selected"] = (joNewlyFoundZoopDeviceName == joSelectedZoopTerminalName)
+            joNewlyFoundZoopDevice?.let {
+                val model = TerminalModel(it)
+                var isSelected = false
+                val uri = it.getString("uri")
+                val joSelectedZoopTerminal = TerminalListManager.getCurrentSelectedZoopTerminal()
+                isSelected = if (joSelectedZoopTerminal?.getString("uri") != null) {
+                    0 == uri.compareTo(joSelectedZoopTerminal.getString("uri"))
+                } else {
+                    false
+                }
+                model.selected = isSelected
+                terminalAdapter?.addTerminal(model)
             }
-            arrayListZoopTerminalsListForUI!!.add(hashMapZoopTerminalStringsForUI)
-            adapter!!.notifyDataSetChanged()
-//            terminalListManager?.requestZoopDeviceSelection(joNewlyFoundZoopDevice)
         } catch (e: Exception) {
             ZLog.exception(677541, e)
         }
@@ -131,18 +159,105 @@ class ConfigPinPadActivity : BaseActivity() , DeviceSelectionListener {
     }
 
     override fun deviceSelectedResult(
-        joZoopSelectedDevice: JSONObject,
+        joZoopSelectedDevice: JSONObject?,
         vectorAllAvailableZoopTerminals: Vector<JSONObject?>?,
         iSelectedDeviceIndex: Int
     ) {
         try {
-//        val namePinpad: String = joZoopSelectedDevice.getString("name")
-            findViewById<Button>(R.id.buttonFinishConfiguration).visibility = View.VISIBLE
-            adapter!!.notifyDataSetChanged()
+            if (joZoopSelectedDevice != null) {
+                //unchecked all device itens and checked the selected device
+                terminalAdapter?.checkRadioButton()
+                val btn = findViewById<Button>(R.id.buttonFinishConfiguration)
+                btn.visibility = View.VISIBLE
+                terminalAdapter!!.notifyDataSetChanged()
+            }
         } catch (e: Exception) {
             ZLog.exception(300056, e)
         }
     }
 
+    private fun verifyJSONObjectTerminalIsZoopTerminal(jsTerminal: JSONObject) {
+        try {
+            terminalAdapter?.setEnable(false)
+            //hide text "Maquininha Incompatível
+            terminalAdapter?.hideErrorTextViewInfoSelected()
+            terminalAdapter?.showLoading()
+            terminalListManager?.checkTerminalCompatibility(jsTerminal, this)
+        } catch (e: Exception) {
+            ZLog.exception(300064, e)
+            //hide loading of all itens
+            terminalAdapter?.hideLoadingUIComponents()
+            terminalAdapter?.showErrorTextView(R.string.error_validator_terminal)
+        }
+    }
+
+    override fun terminalModelItemOnClick(model: TerminalModel?, position: Int) {
+        try {
+            terminalAdapter?.setEnable(true)
+            isCheckingTerminal = true
+            buttonFinishConfiguration?.text = resources.getString(R.string.button_terminal_configuration_finished_cancel)
+            model?.jsonTerminal?.let {
+                verifyJSONObjectTerminalIsZoopTerminal(it)
+                ZLog.t("Selected device by click: " + it.toString(3))
+                terminalListManager?.requestZoopDeviceSelection(it)
+            }
+        } catch (e: Exception) {
+            ZLog.exception(677601, e)
+        }
+    }
+
+    override fun compatibilityResult(typeTerminalKeyEnum: TypeTerminalKeyEnum?, jsonObject: JSONObject?) {
+        runOnUiThread {
+            when (typeTerminalKeyEnum) {
+                TypeTerminalKeyEnum.KEY_COMPATIBLE -> {
+                    terminalAdapter!!.hideLoadingUIComponents()
+                    terminalAdapter!!.updateTypeTerminalModelSelected(TypeTerminalKeyEnum.KEY_COMPATIBLE)
+                    buttonFinishConfiguration!!.setText(R.string.button_terminal_configuration_finished)
+                    isCheckingTerminal = false
+                    terminalAdapter!!.setEnable(true)
+                }
+                TypeTerminalKeyEnum.KEY_PARTIALLY_COMPATIBLE -> {
+                    terminalAdapter!!.hideLoadingUIComponents()
+                    terminalAdapter!!.updateTypeTerminalModelSelected(TypeTerminalKeyEnum.KEY_PARTIALLY_COMPATIBLE)
+                    buttonFinishConfiguration!!.setText(R.string.button_terminal_configuration_finished)
+                    isCheckingTerminal = false
+                    terminalAdapter!!.setEnable(true)
+                }
+                TypeTerminalKeyEnum.KEY_INCOMPATIBLE -> {
+                    terminalAdapter!!.hideLoadingUIComponents()
+                    terminalAdapter!!.updateTypeTerminalModelSelected(TypeTerminalKeyEnum.KEY_INCOMPATIBLE)
+                    buttonFinishConfiguration!!.setText(R.string.button_terminal_configuration_finished)
+                    isCheckingTerminal = false
+                    terminalAdapter!!.setEnable(true)
+                }
+                else -> {
+                    //do nothing
+                }
+            }
+        }
+    }
+
+    override fun compatibilityError(typeTerminalKeyErrorEnum: TypeTerminalKeyErrorEnum?, s: String?) {
+        runOnUiThread {
+            if (typeTerminalKeyErrorEnum == TypeTerminalKeyErrorEnum.PROCESS_VALIDATOR_CANCELLED) {
+                terminalAdapter!!.hideErrorTextViewInfoSelected()
+                terminalAdapter!!.hideLoadingUIComponents()
+            } else {
+                terminalAdapter!!.hideLoadingUIComponents()
+                terminalAdapter!!.showErrorTextView(R.string.error_validator_terminal)
+            }
+            //deselecting terminal model selected
+            try {
+                terminalAdapter!!.uncheckRadioButtonSelected()
+                TerminalListManager.resetSelectedTerminal()
+            } catch (e: Exception) {
+                ZLog.exception(677602, e)
+            }
+            terminalAdapter!!.updateTypeTerminalModelSelected(TypeTerminalKeyEnum.UNKNOWN)
+            buttonFinishConfiguration!!.setText(R.string.button_terminal_configuration_finished)
+            isCheckingTerminal = false
+            terminalAdapter!!.setEnable(true)
+        }
+    }
 
 }

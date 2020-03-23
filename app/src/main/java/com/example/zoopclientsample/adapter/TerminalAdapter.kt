@@ -118,8 +118,7 @@ class TerminalAdapter(
         checkRadioButtonSelected()
     }
 
-    fun showLoadingWithTextInfo(resourceId: Int) {
-        this.resourceId = resourceId
+    fun showLoading() {
         resetLoadingToModels()
         terminalModelSelected.showLoading = true
         notifyDataSetChanged()
