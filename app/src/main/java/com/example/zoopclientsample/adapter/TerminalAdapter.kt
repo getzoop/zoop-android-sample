@@ -27,7 +27,6 @@ class TerminalAdapter(
     private var itemViewSelected: View? = null
     private var itemView: View? = null
     private var positionSelected = 0
-    private var resourceId = 0
     private var isEnable = true
 
     override fun getCount(): Int {
@@ -63,11 +62,11 @@ class TerminalAdapter(
             dateTimeDetected = textViewDateTimeDetected
             selected = radioButton
 
-            terminalName?.text = model.name
+            terminalName!!.text = model.name
 
-            if (dateTimeDetected != null) {
-                dateTimeDetected!!.visibility = View.VISIBLE
-                dateTimeDetected!!.text = model.dateTimeDetected
+            dateTimeDetected?.let {
+                it.visibility = View.VISIBLE
+                it.text = model.dateTimeDetected
             }
 
             when {
@@ -85,9 +84,9 @@ class TerminalAdapter(
                 }
             }
 
-            if (selected != null) {
-                selected!!.visibility = View.VISIBLE
-                selected!!.isChecked = model.selected
+            selected?.let {
+                it.visibility = View.VISIBLE
+                it.isChecked = model.selected
                 if (model.showLoading) showProgressbarContainer() else hideProgressbarContainer()
             }
 
@@ -214,9 +213,6 @@ class TerminalAdapter(
     private fun hideProgressbarContainerSelected() {
         progressBarFromViewSelected.visibility = View.GONE
     }
-
-    private val contextFromViewSelected: Context
-        get() = itemView!!.context
 
     private fun hideUIComponentsPreviousItemTerminalSelected() {
         hideIsZoopTerminalTextViewInfoSelected()

@@ -20,8 +20,6 @@ import java.util.*
 class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelectionListener,
     ExtraCardInformationListener, ApplicationDisplayListener {
 
-    private val TAG = ChargeActivity::class.java.simpleName
-
     var terminalPayment: ZoopTerminalPayment? = null
     var sValueToCharge = ""
     var iNumberOfInstallments = 0

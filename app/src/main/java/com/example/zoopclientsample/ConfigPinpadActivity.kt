@@ -25,8 +25,6 @@ import java.util.*
 class ConfigPinPadActivity : BaseActivity(), DeviceSelectionListener,
     ZoopTerminalKeyValidatorListener, TerminalAdapterListener {
 
-    private val TAG = ConfigPinPadActivity::class.java.simpleName
-
     private var terminalListManager: TerminalListManager? = null
     private var terminalAdapter: TerminalAdapter? = null
     private var lv: ListView? = null
@@ -52,7 +50,7 @@ class ConfigPinPadActivity : BaseActivity(), DeviceSelectionListener,
 
     private fun setupButton() {
         buttonFinishConfiguration = findViewById<Button>(R.id.buttonFinishConfiguration)
-        buttonFinishConfiguration?.let{
+        buttonFinishConfiguration?.let {
             it.setOnClickListener {
                 if (isCheckingTerminal) {
                     //abort terminal compatibility checking
@@ -178,28 +176,28 @@ class ConfigPinPadActivity : BaseActivity(), DeviceSelectionListener,
 
     private fun verifyJSONObjectTerminalIsZoopTerminal(jsTerminal: JSONObject) {
         try {
-            terminalAdapter?.setEnable(false)
+            terminalAdapter!!.setEnable(false)
             //hide text "Maquininha Incompatível
-            terminalAdapter?.hideErrorTextViewInfoSelected()
-            terminalAdapter?.showLoading()
-            terminalListManager?.checkTerminalCompatibility(jsTerminal, this)
+            terminalAdapter!!.hideErrorTextViewInfoSelected()
+            terminalAdapter!!.showLoading()
+            terminalListManager!!.checkTerminalCompatibility(jsTerminal, this)
         } catch (e: Exception) {
             ZLog.exception(300064, e)
             //hide loading of all itens
-            terminalAdapter?.hideLoadingUIComponents()
-            terminalAdapter?.showErrorTextView(R.string.error_validator_terminal)
+            terminalAdapter!!.hideLoadingUIComponents()
+            terminalAdapter!!.showErrorTextView(R.string.error_validator_terminal)
         }
     }
 
     override fun terminalModelItemOnClick(model: TerminalModel?, position: Int) {
         try {
-            terminalAdapter?.setEnable(true)
+            terminalAdapter!!.setEnable(true)
             isCheckingTerminal = true
             buttonFinishConfiguration?.text = resources.getString(R.string.button_terminal_configuration_finished_cancel)
             model?.jsonTerminal?.let {
                 verifyJSONObjectTerminalIsZoopTerminal(it)
                 ZLog.t("Selected device by click: " + it.toString(3))
-                terminalListManager?.requestZoopDeviceSelection(it)
+                terminalListManager!!.requestZoopDeviceSelection(it)
             }
         } catch (e: Exception) {
             ZLog.exception(677601, e)
