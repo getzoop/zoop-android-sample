@@ -50,12 +50,12 @@ class ConfigPinPadActivity : BaseActivity(), DeviceSelectionListener,
 
     private fun setupButton() {
         buttonFinishConfiguration = findViewById<Button>(R.id.buttonFinishConfiguration)
-        buttonFinishConfiguration?.let {
-            it.setOnClickListener {
+        buttonFinishConfiguration?.let { button ->
+            button.setOnClickListener {
                 if (isCheckingTerminal) {
                     //abort terminal compatibility checking
                     terminalListManager!!.interruptCurrentThreadThatCheckTerminalCompatibility()
-                    buttonFinishConfiguration!!.setText(R.string.button_terminal_configuration_finished)
+                    button.setText(R.string.button_terminal_configuration_finished)
                     isCheckingTerminal = false
                 } else {
                     val chargeIntent = Intent(this@ConfigPinPadActivity, ChargeActivity::class.java)
