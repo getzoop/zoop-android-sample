@@ -1,5 +1,9 @@
 package com.example.zoopclientsample
 
+import android.bluetooth.BluetoothAdapter
+import android.content.Intent
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -29,12 +33,14 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
     private var marketplaceId = "insert your marketplaceId here"
     private var sellerId = "insert your sellerId here"
     private var publishableKey: String? = null
+    private var joTransactionResponse: JSONObject? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_charge)
         status = ChargeStatus.READY
         paymentOption = ZoopTerminalPayment.CHARGE_TYPE_CREDIT
+        joTransactionResponse = null
         setupEditText()
         setupButtons()
         findViewById<Button>(R.id.btn_credit_only).performClick()
@@ -55,6 +61,8 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
         val buttonPay = findViewById<Button>(R.id.btn_pay)
         buttonPay?.let {
             it.setOnClickListener {
+                val responseLayout = findViewById<ConstraintLayout>(R.id.responseLayout)
+                responseLayout.visibility = View.GONE
                 when (status) {
                     ChargeStatus.READY -> {
                         if (sValueToCharge.isNotEmpty()) {
@@ -71,6 +79,7 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                         }
                     }
                     ChargeStatus.PROCESSING -> {
+                        status = ChargeStatus.READY
                         try {
                             terminalPayment!!.requestAbortCharge()
                         } catch (e: java.lang.Exception) {
@@ -78,7 +87,18 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                         }
                     }
                     ChargeStatus.FINISHED -> {
-                        //do nothing
+                        status = ChargeStatus.READY
+                        if (joTransactionResponse != null) {
+                            val intent = Intent(this, ReceiptActivity::class.java)
+                            val bundle = Bundle()
+                            bundle.putString("joTransactionResponse", joTransactionResponse.toString())
+                            intent.putExtras(bundle)
+                            startActivity(intent)
+                        }
+                    }
+                    ChargeStatus.ERROR -> {
+                        status = ChargeStatus.READY
+                        startActivity(Intent(this, ChargeActivity::class.java))
                     }
                 }
             }
@@ -173,16 +193,55 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
         }
     }
 
-    override fun paymentSuccessful(p0: JSONObject?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun paymentSuccessful(joResponse: JSONObject?) {
+        runOnUiThread {
+            try {
+                ZLog.t(300023)
+
+                status = ChargeStatus.FINISHED
+
+                hideProgressBarShowResponse()
+                setResponseImageView(R.drawable.icon_approved, "#006400")
+
+                if (joResponse != null) {
+                    setResponseTextView(resources.getString(R.string.text_transaction_step4_approved), "#006400")
+
+                    joTransactionResponse = joResponse
+
+                    val buttonPay = findViewById<Button>(R.id.btn_pay)
+                    buttonPay?.let {
+                        it.text = resources.getString(R.string.charge_button_receipt_label)
+                    }
+                }
+
+            } catch (e: Exception) {
+                ZLog.exception(300024, e)
+            }
+        }
     }
 
-    override fun paymentDuplicated(p0: JSONObject?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private fun showPaymentWarnning(applicationMessage: String) {
+        hideProgressBarShowResponse()
+        ZLog.t(300018, applicationMessage)
+        setResponseImageView(R.drawable.icon_abort, "#CCCC00")
+        setResponseTextView(applicationMessage, "#CCCC00")
+        val buttonPay = findViewById<Button>(R.id.btn_pay)
+        buttonPay?.let {
+            it.text = resources.getString(R.string.charge_button_pay_label)
+        }
     }
 
-    override fun currentChargeCanBeAbortedByUser(p0: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun paymentDuplicated(joResponse: JSONObject?) {
+        runOnUiThread {
+            status = ChargeStatus.READY
+            showPaymentWarnning(resources.getString(R.string.text_transaction_step5_duplicated))
+        }
+    }
+
+    override fun currentChargeCanBeAbortedByUser(canAbortCurrentCharge: Boolean) {
+        runOnUiThread {
+            findViewById<Button>(R.id.btn_pay).isEnabled = canAbortCurrentCharge
+        }
     }
 
     override fun signatureResult(p0: Int) {
@@ -190,15 +249,93 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
     }
 
     override fun paymentAborted() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        runOnUiThread {
+            status = ChargeStatus.READY
+            showPaymentWarnning(resources.getString(R.string.label_title_abort_brand))
+        }
     }
 
     override fun cardholderSignatureRequested() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun paymentFailed(p0: JSONObject?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private fun hideProgressBarShowResponse() {
+        val progressBarLayout = findViewById<ConstraintLayout>(R.id.progressBarLayout)
+        progressBarLayout.visibility = View.GONE
+
+        val responseLayout = findViewById<ConstraintLayout>(R.id.responseLayout)
+        responseLayout.visibility = View.VISIBLE
+    }
+
+    private fun setResponseImageView(idImage: Int, colorString: String) {
+        val imageViewResponse = findViewById<ImageView>(R.id.imageViewResponse)
+        imageViewResponse.setImageBitmap(
+            BitmapFactory.decodeResource(resources, idImage)
+        )
+        imageViewResponse.adjustViewBounds = true
+        imageViewResponse.setColorFilter(Color.parseColor(colorString))
+    }
+
+    private fun setResponseTextView(text: String, colorString: String) {
+        val textViewResponse = findViewById<TextView>(R.id.textViewResponse)
+        textViewResponse.text = text
+        textViewResponse.setTextColor(Color.parseColor(colorString))
+    }
+
+    override fun paymentFailed(joResponse: JSONObject?) {
+        runOnUiThread {
+            try {
+                ZLog.error(300021)
+
+                status = ChargeStatus.ERROR
+
+                hideProgressBarShowResponse()
+                setResponseImageView(R.drawable.icon_denied, "#8B0000")
+
+                val buttonPay = findViewById<Button>(R.id.btn_pay)
+                buttonPay?.let {
+                    it.text = resources.getString(R.string.label_try_again)
+                }
+
+                if (joResponse != null) {
+
+                    var applicationMessage = ""
+
+                    if (joResponse.has("response_code")) {
+                        if (joResponse.getString("response_code") == "8781013") {
+                            applicationMessage = resources.getString(R.string.label_title_error_brand)
+                        }
+                    }
+
+                    if (joResponse.has("error")) {
+                        val joErrorDetails = joResponse.getJSONObject("error")
+
+                        if (joErrorDetails.has("i18n_checkout_message_explanation")) {
+                            applicationMessage =
+                                joErrorDetails.getString("i18n_checkout_message_explanation")
+                        }
+
+                        if (joErrorDetails.has("i18n_checkout_message")) {
+                            applicationMessage =
+                                joErrorDetails.getString("i18n_checkout_message")
+                            ZLog.t(300018, applicationMessage)
+                        }
+
+                        if (joErrorDetails.has("message")) {
+                            applicationMessage += "\n" + joErrorDetails.getString("message")
+                            ZLog.t(300018, applicationMessage)
+                        }
+
+                    } else {
+                        ZLog.error(300020)
+                    }
+
+                    setResponseTextView(applicationMessage, "#8B0000")
+                }
+            } catch (e: Exception) {
+                ZLog.exception(300022, e)
+            }
+        }
     }
 
     override fun showDeviceListForUserSelection(p0: Vector<JSONObject>?) {
@@ -218,7 +355,8 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
     }
 
     override fun bluetoothIsNotEnabledNotification() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+        mBluetoothAdapter.startDiscovery()
     }
 
     override fun cardLast4DigitsRequested() {

@@ -1,5 +1,5 @@
 package com.example.zoopclientsample.model
 
 enum class ChargeStatus {
-    READY, PROCESSING, FINISHED
+    READY, PROCESSING, FINISHED, ERROR
 }

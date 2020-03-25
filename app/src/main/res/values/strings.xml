@@ -31,9 +31,16 @@
 
     <string name="charge_button_pay_label">Pagar</string>
     <string name="charge_button_cancel_label">Cancelar</string>
+    <string name="charge_button_receipt_label">Ver Comprovante</string>
 
     <string name="start_connection_terminal">Conectando&#8230;</string>
+    <string name="start_transaction_status">Status da Transação</string>
+    <string name="label_title_error_brand">Cartão não identificado pelo chip</string>
+    <string name="label_title_abort_brand">Operação cancelada pelo usuário</string>
+    <string name="text_transaction_step4_approved">ransação Aprovada</string>
+    <string name="text_transaction_step5_duplicated">Transação já efetuada</string>
 
+    <string name="label_try_again">Tentar novamente</string>
     <string name="button_new_transaction">Nova Venda</string>
     <string name="charge_button_void_transaction">Cancelar Transação (Estorno)</string>
     <string name="button_print_receipt_merchant">Visualizar Via Estabelecimento</string>
