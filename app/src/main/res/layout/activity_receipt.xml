@@ -4,30 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/progressStatusReceipt"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        android:visibility="visible" >
-
-            <ProgressBar
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center_horizontal"
-                android:orientation="vertical" />
-
-    </FrameLayout>
-
     <LinearLayout
         android:id="@+id/layoutReceipt"
         android:orientation="vertical"
         android:background="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" >
+        android:layout_height="match_parent" >
 
         <ScrollView
             android:id="@+id/scrollViewContents"
@@ -84,10 +66,22 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="20dp"
                         android:layout_marginBottom="50dp"
                         android:typeface="monospace"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        android:visibility="gone" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBarPrintReceipt"
+                        style="?android:attr/progressBarStyleLarge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_gravity="center"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:visibility="visible" />
 
                 </LinearLayout>
 
@@ -104,7 +98,7 @@
                         android:text="@string/button_new_transaction" />
 
                     <Button
-                        android:id="@+id/buttonVoidReceiptTransaction"
+                        android:id="@+id/buttonVoidTransaction"
                         style="@style/btnTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

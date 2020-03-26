@@ -30,9 +30,9 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
     private var sValueToCharge = ""
     private var iNumberOfInstallments = 0
     private var paymentOption = ZoopTerminalPayment.CHARGE_TYPE_CREDIT
-    private var marketplaceId = "insert your marketplaceId here"
-    private var sellerId = "insert your sellerId here"
-    private var publishableKey = "                                 "
+    private var marketplaceId = Credentials.MARKETPLACE_ID
+    private var sellerId = Credentials.SELLER_ID
+    private var publishableKey = Credentials.PUBLISAHBLE_KEY
     private var joTransactionResponse: JSONObject? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

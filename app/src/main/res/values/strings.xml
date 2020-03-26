@@ -46,4 +46,10 @@
     <string name="button_print_receipt_merchant">Visualizar Via Estabelecimento</string>
     <string name="button_print_receipt_cardholder">Visualizar Via Cliente</string>
 
+    <string name="error_activity_receipt">Problemas para procesar o Recibo</string>
+    <string name="token_error_activity_receipt">Sessão expirada</string>
+
+    <string name="unkown_error">Erro desconhecido</string>
+
 </resources>
+
