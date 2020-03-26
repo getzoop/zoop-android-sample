@@ -144,7 +144,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
-            android:id="@+id/btn_pay"
+            android:id="@+id/btn_action"
             style="@style/btnTheme"
             android:text="@string/charge_button_pay_label"
             android:layout_marginTop="0dp"

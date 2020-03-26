@@ -37,7 +37,7 @@
     <string name="start_transaction_status">Status da Transação</string>
     <string name="label_title_error_brand">Cartão não identificado pelo chip</string>
     <string name="label_title_abort_brand">Operação cancelada pelo usuário</string>
-    <string name="text_transaction_step4_approved">ransação Aprovada</string>
+    <string name="text_transaction_step4_approved">Transação Aprovada</string>
     <string name="text_transaction_step5_duplicated">Transação já efetuada</string>
 
     <string name="label_try_again">Tentar novamente</string>
