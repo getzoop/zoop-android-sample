@@ -66,7 +66,7 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                 when (status) {
                     ChargeStatus.READY -> {
                         if (sValueToCharge.isNotEmpty()) {
-                            button.text = resources.getString(R.string.charge_button_cancel_label)
+                            button.text = resources.getString(R.string.label_cancel)
                             val cleanString = sValueToCharge.replace("R$", "").replace("," , ".").trim()
                             val valueToCharge: BigDecimal? = BigDecimal(cleanString)
                             status = ChargeStatus.PROCESSING

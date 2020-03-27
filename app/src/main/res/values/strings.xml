@@ -30,7 +30,7 @@
     <string name="charge_button_charge_debit">Débito</string>
 
     <string name="charge_button_pay_label">Pagar</string>
-    <string name="charge_button_cancel_label">Cancelar</string>
+    <string name="label_cancel">Cancelar</string>
     <string name="charge_button_receipt_label">Ver Comprovante</string>
 
     <string name="start_connection_terminal">Conectando&#8230;</string>
@@ -41,6 +41,7 @@
     <string name="text_transaction_step5_duplicated">Transação já efetuada</string>
 
     <string name="label_try_again">Tentar novamente</string>
+    <string name="label_ok">OK</string>
     <string name="button_new_transaction">Nova Venda</string>
     <string name="charge_button_void_transaction">Cancelar Transação (Estorno)</string>
     <string name="button_print_receipt_merchant">Visualizar Via Estabelecimento</string>
@@ -50,6 +51,9 @@
     <string name="token_error_activity_receipt">Sessão expirada</string>
 
     <string name="unkown_error">Erro desconhecido</string>
+
+    <string name="dialog_void_receipt_transaction_text_confirm_void">Você confirma o cancelamento dessa venda (estorno da transação), que cancelará o recebimento de %1$s do cartão iniciado em %2$s?</string>
+
 
 </resources>
 

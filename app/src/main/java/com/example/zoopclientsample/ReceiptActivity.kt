@@ -2,10 +2,10 @@ package com.example.zoopclientsample
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
-import android.widget.Toast
 import com.example.zoopclientsample.api.ReceiptService
 import com.example.zoopclientsample.api.RetrofitInstance
 import com.example.zoopclientsample.ui.AutoResizeTextView
@@ -17,7 +17,8 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ReceiptActivity : BaseActivity(), ReceiptDeliveryListener {
 
@@ -26,17 +27,18 @@ class ReceiptActivity : BaseActivity(), ReceiptDeliveryListener {
     private var userToken = Credentials.USER_TOKEN
     private var errorMsg = ""
     private var joZoopReceipt: JSONObject? = null
+    private var joTransactionResponse: JSONObject? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_receipt)
         val bundle: Bundle? = intent.extras
-        val sJoTransactionResponse: String? = bundle?.getString("joTransactionResponse")
+        val sJoTransactionResponse = bundle?.getString("joTransactionResponse")!!
         findViewById<AutoResizeTextView>(R.id.autoResizeTextViewPrintReceipt).visibility = View.GONE
         findViewById<ProgressBar>(R.id.progressBarPrintReceipt).visibility = View.VISIBLE
         try {
-            val joTransactionResponse = JSONObject(sJoTransactionResponse)
-            receiptId = joTransactionResponse.getString("sales_receipt")
+            joTransactionResponse = JSONObject(sJoTransactionResponse)
+            receiptId = joTransactionResponse!!.getString("sales_receipt")
             getReceipt()
         } catch (e: JSONException) {
             e.printStackTrace()
@@ -88,13 +90,41 @@ class ReceiptActivity : BaseActivity(), ReceiptDeliveryListener {
         }
     }
 
+    private fun getDateFromTimestampStringAtTimezone(sTimestamp: String): Date? {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sszzzzz", Locale.US)
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+        return dateFormat.parse(sTimestamp)
+    }
+
+    private fun checkIfTransactionCanBeCancelled(joTransactionResponse: JSONObject?): Boolean {
+        if (joTransactionResponse != null) {
+            if (joTransactionResponse.getString("status").compareTo("succeeded") == 0) {
+                val sTransactionDateTime = joTransactionResponse.getString("created_at")
+                val transactionDate = getDateFromTimestampStringAtTimezone(sTransactionDateTime)
+                if (transactionDate != null) {
+                    return DateUtils.isToday(transactionDate.time)
+                }
+            }
+        }
+        return false
+    }
+
     private fun setButtonsAction() {
         findViewById<Button>(R.id.buttonNewTransaction).setOnClickListener {
             startActivity(Intent(this, ChargeActivity::class.java))
         }
-        findViewById<Button>(R.id.buttonVoidTransaction).setOnClickListener {
-            //TODO:
-            Toast.makeText(applicationContext, R.string.charge_button_void_transaction, Toast.LENGTH_SHORT).show()
+        val buttonVoidTransaction = findViewById<Button>(R.id.buttonVoidTransaction)
+        if (checkIfTransactionCanBeCancelled(joTransactionResponse)) {
+            buttonVoidTransaction.visibility = View.VISIBLE
+        } else {
+            buttonVoidTransaction.visibility =  View.GONE
+        }
+        buttonVoidTransaction.setOnClickListener {
+            val intent = Intent(this, VoidActivity::class.java)
+            val bundle = Bundle()
+            bundle.putString("joTransactionResponse", joTransactionResponse.toString())
+            intent.putExtras(bundle)
+            startActivity(intent)
         }
         findViewById<Button>(R.id.buttonPrintReceiptCardholderCopy).setOnClickListener {
             joZoopReceipt?.let {
