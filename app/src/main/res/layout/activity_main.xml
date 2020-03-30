@@ -6,15 +6,15 @@
     android:orientation="vertical"
     android:layout_marginTop="150dp">
 
-    <Button android:id="@+id/btn_sales"
+    <Button android:id="@+id/buttonSales"
         android:text="@string/sales"
         style="@style/btnTheme"/>
 
-    <Button android:id="@+id/btn_terminals"
+    <Button android:id="@+id/buttonTerminals"
         android:text="@string/terminals"
         style="@style/btnTheme"/>
 
-    <Button android:id="@+id/btn_others"
+    <Button android:id="@+id/buttonOthers"
         android:text="@string/others"
         style="@style/btnTheme"/>
 

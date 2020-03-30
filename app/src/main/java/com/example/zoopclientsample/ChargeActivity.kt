@@ -13,7 +13,6 @@ import android.view.View
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import com.example.zoopclientsample.model.ChargeStatus
 import com.zoop.zoopandroidsdk.ZoopTerminalPayment
 import com.zoop.zoopandroidsdk.commons.ZLog
 import com.zoop.zoopandroidsdk.terminal.*
@@ -25,7 +24,7 @@ import java.util.*
 class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelectionListener,
     ExtraCardInformationListener, ApplicationDisplayListener {
 
-    private var status = ChargeStatus.READY
+    private var status = TransactionStatus.READY
     private var terminalPayment: ZoopTerminalPayment? = null
     private var sValueToCharge = ""
     private var iNumberOfInstallments = 0
@@ -38,14 +37,14 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_charge)
-        status = ChargeStatus.READY
+        status = TransactionStatus.READY
         paymentOption = ZoopTerminalPayment.CHARGE_TYPE_CREDIT
         joTransactionResponse = null
         setupEditText()
         setupButtons()
-        findViewById<Button>(R.id.btn_credit_only).performClick()
+        findViewById<Button>(R.id.buttonCreditOnly).performClick()
         setupSpinner()
-        callCharge()
+        setupActionButton()
         try {
             terminalPayment = ZoopTerminalPayment()
             terminalPayment!!.setTerminalPaymentListener(this@ChargeActivity)
@@ -57,19 +56,19 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
         }
     }
 
-    private fun callCharge() {
-        val buttonAction = findViewById<Button>(R.id.btn_action)
+    private fun setupActionButton() {
+        val buttonAction = findViewById<Button>(R.id.buttonAction)
         buttonAction?.let { button ->
             button.setOnClickListener {
-                val responseLayout = findViewById<ConstraintLayout>(R.id.responseLayout)
-                responseLayout.visibility = View.GONE
+                findViewById<ImageView>(R.id.imageViewResponse).visibility = View.GONE
+                findViewById<TextView>(R.id.textViewResponse).visibility = View.GONE
                 when (status) {
-                    ChargeStatus.READY -> {
+                    TransactionStatus.READY -> {
                         if (sValueToCharge.isNotEmpty()) {
                             button.text = resources.getString(R.string.label_cancel)
                             val cleanString = sValueToCharge.replace("R$", "").replace("," , ".").trim()
                             val valueToCharge: BigDecimal? = BigDecimal(cleanString)
-                            status = ChargeStatus.PROCESSING
+                            status = TransactionStatus.PROCESSING
                             terminalPayment!!.charge(valueToCharge,
                                 paymentOption,
                                 iNumberOfInstallments,
@@ -78,16 +77,16 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                                 publishableKey)
                         }
                     }
-                    ChargeStatus.PROCESSING -> {
-                        status = ChargeStatus.READY
+                    TransactionStatus.PROCESSING -> {
+                        status = TransactionStatus.READY
                         try {
                             terminalPayment!!.requestAbortCharge()
-                        } catch (e: java.lang.Exception) {
+                        } catch (e: Exception) {
                             e.printStackTrace()
                         }
                     }
-                    ChargeStatus.FINISHED -> {
-                        status = ChargeStatus.READY
+                    TransactionStatus.FINISHED -> {
+                        status = TransactionStatus.READY
                         if (joTransactionResponse != null) {
                             val intent = Intent(this, ReceiptActivity::class.java)
                             val bundle = Bundle()
@@ -96,8 +95,8 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                             startActivity(intent)
                         }
                     }
-                    ChargeStatus.ERROR -> {
-                        status = ChargeStatus.READY
+                    TransactionStatus.ERROR -> {
+                        status = TransactionStatus.READY
                         startActivity(Intent(this, ChargeActivity::class.java))
                     }
                 }
@@ -126,9 +125,9 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
 
     private fun setupButtons() {
         val spinner = findViewById<Spinner>(R.id.spinnerNumberOfInstallments)
-        val btnCreditOnly = findViewById<Button>(R.id.btn_credit_only)
-        val btnCreditWithInstallments = findViewById<Button>(R.id.btn_credit_with_installments)
-        val btnDebit = findViewById<Button>(R.id.btn_debit)
+        val btnCreditOnly = findViewById<Button>(R.id.buttonCreditOnly)
+        val btnCreditWithInstallments = findViewById<Button>(R.id.buttonCreditWithInstallments)
+        val btnDebit = findViewById<Button>(R.id.buttonDebit)
         btnCreditOnly?.let { buttonPressed ->
             buttonPressed.setOnClickListener {
                 spinner.setSelection(0)
@@ -197,13 +196,13 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
         runOnUiThread {
             try {
                 ZLog.t(300023)
-                status = ChargeStatus.FINISHED
+                status = TransactionStatus.FINISHED
                 hideProgressBarShowResponse()
                 setResponseImageView(R.drawable.icon_approved, "#006400")
                 if (joResponse != null) {
                     setResponseTextView(resources.getString(R.string.text_transaction_step4_approved), "#006400")
                     joTransactionResponse = joResponse
-                    findViewById<Button>(R.id.btn_action).text = resources.getString(R.string.charge_button_receipt_label)
+                    findViewById<Button>(R.id.buttonAction).text = resources.getString(R.string.charge_button_receipt_label)
                 }
             } catch (e: Exception) {
                 ZLog.exception(300024, e)
@@ -216,19 +215,19 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
         ZLog.t(300018, applicationMessage)
         setResponseImageView(R.drawable.icon_abort, "#CCCC00")
         setResponseTextView(applicationMessage, "#CCCC00")
-        findViewById<Button>(R.id.btn_action).text = resources.getString(R.string.charge_button_pay_label)
+        findViewById<Button>(R.id.buttonAction).text = resources.getString(R.string.charge_button_pay_label)
     }
 
     override fun paymentDuplicated(joResponse: JSONObject?) {
         runOnUiThread {
-            status = ChargeStatus.READY
+            status = TransactionStatus.READY
             showPaymentWarnning(resources.getString(R.string.text_transaction_step5_duplicated))
         }
     }
 
     override fun currentChargeCanBeAbortedByUser(canAbortCurrentCharge: Boolean) {
         runOnUiThread {
-            findViewById<Button>(R.id.btn_action).isEnabled = canAbortCurrentCharge
+            findViewById<Button>(R.id.buttonAction).isEnabled = canAbortCurrentCharge
         }
     }
 
@@ -238,7 +237,7 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
 
     override fun paymentAborted() {
         runOnUiThread {
-            status = ChargeStatus.READY
+            status = TransactionStatus.READY
             showPaymentWarnning(resources.getString(R.string.label_title_abort_brand))
         }
     }
@@ -248,8 +247,10 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
     }
 
     private fun hideProgressBarShowResponse() {
-        findViewById<ConstraintLayout>(R.id.progressBarLayout).visibility = View.GONE
-        findViewById<ConstraintLayout>(R.id.responseLayout).visibility = View.VISIBLE
+        findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
+        findViewById<TextView>(R.id.textViewProgressBar).visibility = View.GONE
+        findViewById<ImageView>(R.id.imageViewResponse).visibility = View.VISIBLE
+        findViewById<TextView>(R.id.textViewResponse).visibility = View.VISIBLE
     }
 
     private fun setResponseImageView(idImage: Int, colorString: String) {
@@ -271,10 +272,10 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
         runOnUiThread {
             try {
                 ZLog.error(300021)
-                status = ChargeStatus.ERROR
+                status = TransactionStatus.ERROR
                 hideProgressBarShowResponse()
                 setResponseImageView(R.drawable.icon_denied, "#8B0000")
-                findViewById<Button>(R.id.btn_action).text = resources.getString(R.string.label_try_again)
+                findViewById<Button>(R.id.buttonAction).text = resources.getString(R.string.label_try_again)
                 if (joResponse != null) {
                     var applicationMessage = ""
                     if (joResponse.has("response_code")) {
@@ -299,6 +300,9 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                         }
                     } else {
                         ZLog.error(300020)
+                    }
+                    if (applicationMessage.isEmpty()) {
+                        applicationMessage = resources.getString(R.string.unkown_error)
                     }
                     setResponseTextView(applicationMessage, "#8B0000")
                 }
@@ -349,15 +353,10 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
 
     override fun showMessage(stringMessage: String?, messageType: TerminalMessageType?, sExplanation: String?) {
         runOnUiThread {
-            try {
-                ZLog.t(677303, stringMessage)
-                val progressBarLayout = findViewById<ConstraintLayout>(R.id.progressBarLayout)
-                progressBarLayout.visibility = View.VISIBLE
-                val textViewProgressBar = findViewById<TextView>(R.id.textViewProgressBar)
-                textViewProgressBar.text = stringMessage
-            } catch (e: Exception) {
-                ZLog.exception(677520, e)
-            }
+            findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
+            val textViewProgressBar = findViewById<TextView>(R.id.textViewProgressBar)
+            textViewProgressBar.visibility = View.VISIBLE
+            textViewProgressBar.text = stringMessage
         }
     }
 }

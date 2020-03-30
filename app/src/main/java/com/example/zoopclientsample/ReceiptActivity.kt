@@ -90,31 +90,12 @@ class ReceiptActivity : BaseActivity(), ReceiptDeliveryListener {
         }
     }
 
-    private fun getDateFromTimestampStringAtTimezone(sTimestamp: String): Date? {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sszzzzz", Locale.US)
-        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
-        return dateFormat.parse(sTimestamp)
-    }
-
-    private fun checkIfTransactionCanBeCancelled(joTransactionResponse: JSONObject?): Boolean {
-        if (joTransactionResponse != null) {
-            if (joTransactionResponse.getString("status").compareTo("succeeded") == 0) {
-                val sTransactionDateTime = joTransactionResponse.getString("created_at")
-                val transactionDate = getDateFromTimestampStringAtTimezone(sTransactionDateTime)
-                if (transactionDate != null) {
-                    return DateUtils.isToday(transactionDate.time)
-                }
-            }
-        }
-        return false
-    }
-
     private fun setButtonsAction() {
         findViewById<Button>(R.id.buttonNewTransaction).setOnClickListener {
             startActivity(Intent(this, ChargeActivity::class.java))
         }
         val buttonVoidTransaction = findViewById<Button>(R.id.buttonVoidTransaction)
-        if (checkIfTransactionCanBeCancelled(joTransactionResponse)) {
+        if (Extras.checkIfTransactionCanBeCancelled(joTransactionResponse)) {
             buttonVoidTransaction.visibility = View.VISIBLE
         } else {
             buttonVoidTransaction.visibility =  View.GONE

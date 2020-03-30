@@ -1,5 +1,6 @@
 *.iml
 .gradle
+/app/src/main/java/com/example/zoopclientsample/Credentials.kt
 /local.properties
 /.idea/caches
 /.idea/libraries

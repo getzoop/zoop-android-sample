@@ -14,15 +14,15 @@ class MainActivity : BaseActivity() {
 
         ZoopAPI.initialize(application)
 
-        btn_sales.setOnClickListener {
+        buttonSales.setOnClickListener {
             startActivity(Intent(this, ChargeActivity::class.java))
         }
 
-        btn_terminals.setOnClickListener {
+        buttonTerminals.setOnClickListener {
             startActivity(Intent(this, ConfigPinPadActivity::class.java))
         }
 
-        btn_others.setOnClickListener {
+        buttonOthers.setOnClickListener {
             Toast.makeText(
                 this,
                 resources.getString(R.string.others),

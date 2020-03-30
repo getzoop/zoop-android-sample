@@ -23,6 +23,7 @@
 
     <string name="charge_hint_type_value_with_decimals">Valor da venda</string>
     <string name="charge_label_choose_payment_action_below">Selecione a opção de pagamento</string>
+    <string name="void_label_payment_action_below">Opção de pagamento</string>
     <string name="number_of_installments">Número de parcelas</string>
 
     <string name="charge_button_credit_only">Crédito</string>
@@ -53,7 +54,7 @@
     <string name="unkown_error">Erro desconhecido</string>
 
     <string name="dialog_void_receipt_transaction_text_confirm_void">Você confirma o cancelamento dessa venda (estorno da transação), que cancelará o recebimento de %1$s do cartão iniciado em %2$s?</string>
-
+    <string name="text_void_transaction_step4_approved">Transação Estornada</string>
 
 </resources>
 
