@@ -2,6 +2,7 @@ package com.example.zoopclientsample
 
 import android.text.format.DateUtils
 import org.json.JSONObject
+import java.math.BigDecimal
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -29,31 +30,28 @@ class Extras {
             return false
         }
 
-        fun formatAmount(amount: String?): String {
-            if (amount != null) {
-                val cleanString = amount.toString().replace(Regex("[R$.,]"), "").trim()
-                val parsed = cleanString.toDouble()
-                return NumberFormat.getCurrencyInstance().format(parsed / 100)
-            }
-            return "-"
+        fun parseCurrencyFormatToBigDecimal(amount: String): BigDecimal {
+            val cleanString = amount.replace(Regex("[R$.,]"), "").trim()
+            val parsed = cleanString.toDouble()
+            return BigDecimal(parsed / 100)
         }
 
-        fun translatePaymentTypeInPortuguese(paymentType: String?): String {
-            if (paymentType != null) {
-                return when (paymentType.toUpperCase(Locale.ROOT)) {
-                    Constants.CREDIT -> "CRÉDITO"
-                    Constants.DEBIT -> "DÉBITO"
-                    else -> "DESCONHECIDO"
-                }
-            }
-            return "-"
+        fun parseDoubleToCurrenyFormat(amount: String): String {
+            val cleanString = amount.replace(Regex("[R$.,]"), "").trim()
+            val parsed = cleanString.toDouble()
+            return NumberFormat.getCurrencyInstance().format(parsed / 100)
         }
 
-        fun formatNumberOfInstallments(numberOfInstallments: String?): String {
-            if (numberOfInstallments != "null") {
-                return "$numberOfInstallments X"
+        fun translatePaymentType(paymentType: String): String {
+            return when (paymentType.toUpperCase(Locale.ROOT)) {
+                Constants.CREDIT -> "CRÉDITO"
+                Constants.DEBIT -> "DÉBITO"
+                else -> "DESCONHECIDO"
             }
-            return "-"
+        }
+
+        fun formatNumberOfInstallments(numberOfInstallments: String): String {
+            return "$numberOfInstallments x"
         }
 
     }

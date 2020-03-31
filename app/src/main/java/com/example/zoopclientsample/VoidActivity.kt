@@ -76,25 +76,28 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
     }
 
     private fun showTransactionToVoidDetails(joTransactionResponse: JSONObject) {
-        var amount: String? = null
+        var amount = ""
         if (joTransactionResponse.has("amount")) {
             amount = joTransactionResponse.getString("amount")
         }
-        var paymentType: String? = null
+        valueWithCurrency = Extras.parseDoubleToCurrenyFormat(amount)
+        var paymentType = ""
         if (joTransactionResponse.has("payment_type")) {
             paymentType = joTransactionResponse.getString("payment_type")
         }
-        var numberOfInstallments: String? = null
+        var numberOfInstallments = ""
         if (joTransactionResponse.has("installment_plan")) {
             numberOfInstallments = joTransactionResponse.getString("installment_plan")
+        }
+        if (numberOfInstallments == "null") {
+            numberOfInstallments = "1"
         }
         if (joTransactionResponse.has("payment_method")) {
             first4digitsCardNumber =
                 joTransactionResponse.getJSONObject("payment_method").getString("first4_digits")
         }
-        valueWithCurrency = Extras.formatAmount(amount)
         findViewById<TextView>(R.id.textViewTransactionToVoidValue).text = valueWithCurrency
-        findViewById<TextView>(R.id.textViewTransactionToVoidPaymentType).text = Extras.translatePaymentTypeInPortuguese(paymentType)
+        findViewById<TextView>(R.id.textViewTransactionToVoidPaymentType).text = Extras.translatePaymentType(paymentType)
         findViewById<TextView>(R.id.textViewTransactionToVoidNumberOfInstallments).text = Extras.formatNumberOfInstallments(numberOfInstallments)
     }
 

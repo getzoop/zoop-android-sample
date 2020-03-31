@@ -66,8 +66,7 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                     TransactionStatus.READY -> {
                         if (sValueToCharge.isNotEmpty()) {
                             button.text = resources.getString(R.string.label_cancel)
-                            val cleanString = sValueToCharge.replace("R$", "").replace("," , ".").trim()
-                            val valueToCharge: BigDecimal? = BigDecimal(cleanString)
+                            val valueToCharge: BigDecimal? = Extras.parseCurrencyFormatToBigDecimal(sValueToCharge)
                             status = TransactionStatus.PROCESSING
                             terminalPayment!!.charge(valueToCharge,
                                 paymentOption,
@@ -177,11 +176,9 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    if(s.toString() != sValueToCharge) {
+                    if (s.toString() != sValueToCharge) {
                         it.removeTextChangedListener(this)
-                        val cleanString = s.toString().replace(Regex("[R$.,]"), "").trim()
-                        val parsed = cleanString.toDouble()
-                        val formatted = NumberFormat.getCurrencyInstance().format(parsed/100)
+                        val formatted = Extras.parseDoubleToCurrenyFormat(s.toString())
                         sValueToCharge = formatted
                         it.setText(formatted)
                         it.setSelection(formatted.length)
