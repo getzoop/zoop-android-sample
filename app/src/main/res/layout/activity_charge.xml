@@ -7,88 +7,107 @@
     android:layout_height="match_parent"
     tools:context=".ChargeActivity">
 
-    <TextView
-        android:id="@+id/textViewValueToCharge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="@string/charge_hint_type_value_with_decimals"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <EditText
-        android:id="@+id/editTextValueToCharge"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="45dp"
-        android:layout_marginEnd="45dp"
-        android:textSize="30sp"
-        android:gravity="center"
-        android:inputType="number"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewValueToCharge" />
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/textViewPaymentOption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="@string/charge_label_choose_payment_action_below"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextValueToCharge"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <Button android:id="@+id/buttonCreditOnly"
-        android:text="@string/charge_button_credit_only"
-        style="@style/btnThemeAlt"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewPaymentOption" />
+            <TextView
+                android:id="@+id/textViewValueToCharge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="@string/charge_hint_type_value_with_decimals"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
-    <Button android:id="@+id/buttonCreditWithInstallments"
-        android:text="@string/charge_button_charge_credit_with_installments"
-        style="@style/btnThemeAlt"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCreditOnly" />
+            <EditText
+                android:id="@+id/editTextValueToCharge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="45dp"
+                android:layout_marginEnd="45dp"
+                android:textSize="30sp"
+                android:gravity="center"
+                android:inputType="number"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewValueToCharge" />
 
-    <Button android:id="@+id/buttonDebit"
-        android:text="@string/charge_button_charge_debit"
-        style="@style/btnThemeAlt"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCreditWithInstallments" />
+            <TextView
+                android:id="@+id/textViewPaymentOption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="@string/charge_label_choose_payment_action_below"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextValueToCharge"/>
 
-    <TextView
-        android:id="@+id/textViewNumberOfInstallments"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="@string/number_of_installments"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonDebit"/>
+            <Button
+                android:id="@+id/buttonCreditOnly"
+                android:text="@string/charge_button_credit_only"
+                style="@style/btnThemeAlt"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewPaymentOption" />
 
-    <Spinner
-        android:id="@+id/spinnerNumberOfInstallments"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="45dp"
-        android:layout_marginEnd="45dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNumberOfInstallments"/>
+            <Button
+                android:id="@+id/buttonCreditWithInstallments"
+                android:text="@string/charge_button_charge_credit_with_installments"
+                style="@style/btnThemeAlt"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonCreditOnly" />
+
+            <Button
+                android:id="@+id/buttonDebit"
+                android:text="@string/charge_button_charge_debit"
+                style="@style/btnThemeAlt"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonCreditWithInstallments" />
+
+            <TextView
+                android:id="@+id/textViewNumberOfInstallments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="@string/number_of_installments"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonDebit"/>
+
+            <Spinner
+                android:id="@+id/spinnerNumberOfInstallments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="45dp"
+                android:layout_marginEnd="45dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewNumberOfInstallments"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/progressBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="15dp"
+        android:background="#F0F0F0"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">

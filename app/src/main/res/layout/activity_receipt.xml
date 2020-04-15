@@ -1,131 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ChargeActivity">
 
-    <LinearLayout
-        android:id="@+id/layoutReceipt"
-        android:orientation="vertical"
-        android:background="@android:color/white"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:fillViewport="true">
 
-        <ScrollView
-            android:id="@+id/scrollViewContents"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:fillViewport="true" >
+            android:layout_height="wrap_content"
+            android:background="@color/colorReceipt"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_margin="30dp">
 
-            <LinearLayout
+            <ImageView
+                android:id="@+id/imageViewLogoReceipt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/logo_zoop_receipt"
+                android:contentDescription="@string/logo_zoop_receipt" />
+
+            <com.example.zoopclientsample.ui.AutoResizeTextView
+                android:id="@+id/autoResizeTextViewPrintReceipt"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingLeft="21dp"
-                android:paddingRight="21dp"
-                android:paddingTop="30dp"
-                android:paddingBottom="10dp" >
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="50dp"
+                android:typeface="monospace"
+                android:textSize="12sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageViewLogoReceipt"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:visibility="gone"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@color/colorReceipt">
+            <ProgressBar
+                android:id="@+id/progressBarPrintReceipt"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="50dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageViewLogoReceipt"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:visibility="visible" />
 
-                    <LinearLayout
-                        android:id="@+id/linearLayoutReceiptLogo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="50dp"
-                        android:orientation="horizontal" >
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" />
+    </ScrollView>
 
-                        <ImageView
-                            android:id="@+id/imageViewLogoReceipt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:adjustViewBounds="true"
-                            android:src="@drawable/logo_zoop_receipt" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F0F0F0"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" />
+        <Button
+            android:id="@+id/buttonNewTransaction"
+            android:text="@string/button_new_transaction"
+            style="@style/btnTheme"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-                    </LinearLayout>
+        <Button
+            android:id="@+id/buttonVoidTransaction"
+            android:text="@string/charge_button_void_transaction"
+            style="@style/btnTheme"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonNewTransaction"/>
 
-                    <com.example.zoopclientsample.ui.AutoResizeTextView
-                        android:id="@+id/autoResizeTextViewPrintReceipt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginBottom="50dp"
-                        android:typeface="monospace"
-                        android:textSize="12sp"
-                        android:visibility="gone" />
+        <Button
+            android:id="@+id/buttonPrintReceiptCardholderCopy"
+            android:text="@string/button_print_receipt_cardholder"
+            style="@style/btnTheme"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonVoidTransaction"/>
 
-                    <ProgressBar
-                        android:id="@+id/progressBarPrintReceipt"
-                        style="?android:attr/progressBarStyleLarge"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:layout_gravity="center"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical"
-                        android:visibility="visible" />
+        <Button
+            android:id="@+id/buttonPrintReceiptMerchantCopy"
+            android:text="@string/button_print_receipt_merchant"
+            style="@style/btnTheme"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonPrintReceiptCardholderCopy"/>
 
-                </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <Button
-                        android:id="@+id/buttonNewTransaction"
-                        style="@style/btnTheme"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/button_new_transaction" />
-
-                    <Button
-                        android:id="@+id/buttonVoidTransaction"
-                        style="@style/btnTheme"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/charge_button_void_transaction" />
-
-                    <Button
-                        android:id="@+id/buttonPrintReceiptCardholderCopy"
-                        style="@style/btnTheme"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/button_print_receipt_cardholder"
-                        android:visibility="visible" />
-
-                    <Button
-                        android:id="@+id/buttonPrintReceiptMerchantCopy"
-                        style="@style/btnTheme"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/button_print_receipt_merchant"
-                        android:visibility="visible" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </ScrollView>
-
-    </LinearLayout>
-
-</merge>
+</androidx.constraintlayout.widget.ConstraintLayout>

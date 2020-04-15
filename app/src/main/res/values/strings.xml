@@ -55,6 +55,7 @@
 
     <string name="dialog_void_receipt_transaction_text_confirm_void">Você confirma o cancelamento dessa venda (estorno da transação), que cancelará o recebimento de %1$s do cartão iniciado em %2$s?</string>
     <string name="text_void_transaction_step4_approved">Transação Estornada</string>
+    <string name="logo_zoop_receipt">Logo Zoop Receipt</string>
 
 </resources>
 

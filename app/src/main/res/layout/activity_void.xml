@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -80,8 +81,9 @@
         android:id="@+id/questionLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="15dp"
+        android:background="#F0F0F0"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -98,7 +100,8 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <Button android:id="@+id/buttonConfirmOperation"
+        <Button
+            android:id="@+id/buttonConfirmOperation"
             android:text="@string/label_ok"
             style="@style/btnTheme"
             android:layout_marginTop="45dp"
@@ -106,7 +109,8 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewTransactionToVoidQuestion" />
 
-        <Button android:id="@+id/buttonCancelOperation"
+        <Button
+            android:id="@+id/buttonCancelOperation"
             android:text="@string/label_cancel"
             style="@style/btnTheme"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -119,8 +123,9 @@
         android:id="@+id/progressBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="15dp"
+        android:background="#F0F0F0"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -178,8 +183,8 @@
             app:layout_constraintBottom_toTopOf="@+id/buttonAction"/>
 
         <Button android:id="@+id/buttonAction"
-            android:text="@string/label_cancel"
             style="@style/btnTheme"
+            android:text="@string/label_cancel"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
