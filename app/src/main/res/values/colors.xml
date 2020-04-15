@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#FF8C00</color>
     <color name="colorAccent">#FF4500</color>
     <color name="colorReceipt">#FFFFCC</color>
+    <color name="colorPrimaryAlt">#C0C0C0</color>
+    <color name="colorPrimaryDarkAlt">#808080</color>
+    <color name="colorAccentAlt">#696969</color>
 </resources>

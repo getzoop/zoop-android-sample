@@ -107,7 +107,7 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
     private fun setupSpinner() {
         val spinner = findViewById<Spinner>(R.id.spinnerNumberOfInstallments)
         spinner?.let {
-            val numberOfInstallmentsOpt = arrayOf("Vista", "2x ","3x","4x","5x","6x", "7x","8x","9x","10x","11x","12x")
+            val numberOfInstallmentsOpt = arrayOf("1x", "2x ","3x","4x","5x","6x", "7x","8x","9x","10x","11x","12x")
             val arrayAdapter = ArrayAdapter(this, R.layout.simple_spinner_item, numberOfInstallmentsOpt)
             arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
             it.adapter = arrayAdapter
@@ -159,11 +159,11 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
     private fun updateButtons(buttonPressed: Button, buttonUnpressed: Button, buttonUnpressedTwo: Button) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             buttonPressed.backgroundTintList =
-                ContextCompat.getColorStateList(this, R.color.colorAccent)
+                ContextCompat.getColorStateList(this, R.color.colorAccentAlt)
             buttonUnpressed.backgroundTintList =
-                ContextCompat.getColorStateList(this, R.color.colorPrimary)
+                ContextCompat.getColorStateList(this, R.color.colorPrimaryAlt)
             buttonUnpressedTwo.backgroundTintList =
-                ContextCompat.getColorStateList(this, R.color.colorPrimary)
+                ContextCompat.getColorStateList(this, R.color.colorPrimaryAlt)
         }
     }
 

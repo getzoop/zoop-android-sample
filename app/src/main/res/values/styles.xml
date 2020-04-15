@@ -20,4 +20,16 @@
         <item name="android:radius">8dp</item>
     </style>
 
+    <style name="btnThemeAlt">
+        <item name="android:background">@color/colorPrimaryAlt</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginStart">15dp</item>
+        <item name="android:layout_marginEnd">15dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:radius">14dp</item>
+    </style>
+
 </resources>
