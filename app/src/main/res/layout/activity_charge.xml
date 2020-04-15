@@ -44,6 +44,7 @@
         <Button android:id="@+id/buttonCreditOnly"
             android:text="@string/charge_button_credit_only"
             style="@style/btnTheme"
+            android:background="@color/colorPrimary"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewPaymentOption" />
@@ -51,6 +52,7 @@
         <Button android:id="@+id/buttonCreditWithInstallments"
             android:text="@string/charge_button_charge_credit_with_installments"
             style="@style/btnTheme"
+            android:background="@color/colorPrimary"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonCreditOnly" />
@@ -58,6 +60,7 @@
         <Button android:id="@+id/buttonDebit"
             android:text="@string/charge_button_charge_debit"
             style="@style/btnTheme"
+            android:background="@color/colorPrimary"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonCreditWithInstallments" />
