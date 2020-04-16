@@ -55,7 +55,7 @@ Caso tenha dúvidas em relação a essas credenciais entrar em contato com o sup
 
 ## Licença
 
-ZoopClientSample está licenciada sob os termos da licença XXX e está disponível gratuitamente.
+ZoopClientSample está licenciada sob os termos da licença [MIT License](LICENSE) e está disponível gratuitamente.
 
 
 ## Links
