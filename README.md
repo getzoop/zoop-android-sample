@@ -34,6 +34,23 @@ Caso tenha dúvidas em relação a essas credenciais entrar em contato com o sup
 
 ## Screenshots
 
+<table>
+  <tr>
+    <td><img src="screenshots/Screenshot_20200415-165820.png" width=144 height=304></td>
+    <td><img src="screenshots/Screenshot_20200415-165830.png" width=144 height=304></td>
+    <td><img src="screenshots/Screenshot_20200415-165851.png" width=144 height=304></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/Screenshot_20200415-165917.png" width=144 height=304></td>
+    <td><img src="screenshots/Screenshot_20200415-165925.png" width=144 height=304></td>
+    <td><img src="screenshots/Screenshot_20200415-165932.png" width=144 height=304></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/Screenshot_20200415-165940.png" width=144 height=304></td>
+    <td><img src="screenshots/Screenshot_20200415-170014.png" width=144 height=304></td>
+    <td><img src="screenshots/Screenshot_20200415-170030.png" width=144 height=304></td>
+  </tr>
+ </table>
 
 
 ## Licença
