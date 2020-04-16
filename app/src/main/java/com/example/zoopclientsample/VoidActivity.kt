@@ -27,7 +27,7 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
     private var status = TransactionStatus.READY
     private var marketplaceId = Credentials.MARKETPLACE_ID
     private var sellerId = Credentials.SELLER_ID
-    private var publishableKey = Credentials.PUBLISAHBLE_KEY
+    private var publishableKey = Credentials.PUBLISHABLE_KEY
     private var joTransactionResponse: JSONObject? = null
     private var joVoidResponse: JSONObject? = null
     private var valueWithCurrency = ""
