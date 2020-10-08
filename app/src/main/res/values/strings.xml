@@ -4,7 +4,17 @@
 
     <string name="sales">Nova Venda</string>
     <string name="terminals">Maquininhas</string>
-    <string name="others">Outros</string>
+    <string name="logout">Sair</string>
+
+    <string name="username_placeholder">Digite seu e-mail</string>
+    <string name="password_placeholder">Digite sua senha</string>
+    <string name="charge_button_login">Entrar</string>
+
+    <string name="username_error">O campo e-mail é obrigatório</string>
+    <string name="password_error">O campo senha é obrigatório</string>
+
+    <string name="login_connection_error">Erro de conexão</string>
+    <string name="user_without_permission_error">Usuário sem permissões</string>
 
     <string name="label_select_available_terminal">Selecione uma maquininha da lista</string>
     <string name="bluetooth_discovering_compatible_devices">Procurando maquininha</string>

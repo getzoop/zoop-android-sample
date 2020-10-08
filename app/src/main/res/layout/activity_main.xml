@@ -16,8 +16,8 @@
         android:text="@string/terminals"
         style="@style/btnTheme"/>
 
-    <Button android:id="@+id/buttonOthers"
-        android:text="@string/others"
+    <Button android:id="@+id/buttonLogout"
+        android:text="@string/logout"
         style="@style/btnTheme"/>
 
 </LinearLayout>

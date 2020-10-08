@@ -11,7 +11,7 @@ interface ReceiptService {
     fun getReceipt(
         @Header("Authorization") authorization: String?, @Path(
             "id_marketplace"
-        ) id_marketplace: String?, @Path("id_receipt") id_receipt: String?
+        ) marketplaceId: String?, @Path("id_receipt") id_receipt: String?
     ): Call<Any?>?
 
 }
