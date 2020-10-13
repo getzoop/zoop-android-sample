@@ -1,10 +1,11 @@
 package com.example.zoopclientsample
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.zoopclientsample.api.*
@@ -39,6 +40,7 @@ class LoginActivity : AppCompatActivity() {
                 val sPassword = editTextPassword.text.toString()
 
                 if (isUsernameValid(sUsername) && isPasswordValid(sPassword)) {
+                    findViewById<LinearLayout>(R.id.llProgressBar).visibility = View.VISIBLE
                     executeLogin(sUsername, sPassword)
                 }
             }
@@ -90,30 +92,31 @@ class LoginActivity : AppCompatActivity() {
                         val loginResponse: LoginResponse? = response.body()
                         val token = loginResponse!!.token
                         val sellerId = getSellerId(loginResponse.permissions)
+                        findViewById<LinearLayout>(R.id.llProgressBar).visibility = View.GONE
                         if (sellerId.isEmpty()) {
                             showToast(resources.getString(R.string.login_connection_error))
                         } else {
-                            val sharedPref = getPreferences(Context.MODE_PRIVATE)
-                            val editor = sharedPref.edit()
-                            editor.putString("USERNAME", sUsername)
-                            editor.putString("PASSWORD", sPassword)
-                            editor.putString("USER_TOKEN", token)
-                            editor.putString("SELLER_ID", sellerId)
-                            editor.apply()
-                            startActivity(Intent(applicationContext, MainActivity::class.java))
+                            Preferences(this@LoginActivity).storeString(Constants.USERNAME, sUsername)
+                            Preferences(this@LoginActivity).storeString(Constants.PASSWORD, sPassword)
+                            Preferences(this@LoginActivity).storeString(Constants.USER_TOKEN, token)
+                            Preferences(this@LoginActivity).storeString(Constants.SELLER_ID, sellerId)
+                            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                         }
 
                     } else {
+                        findViewById<LinearLayout>(R.id.llProgressBar).visibility = View.GONE
                         val error = response.errorBody().string()
                         val joError = JSONObject(error)
                         showToast(joError.getString("errorMessage"))
                     }
                 } catch (e: JSONException) {
+                    findViewById<LinearLayout>(R.id.llProgressBar).visibility = View.GONE
                     ZLog.exception(300100, e)
                 }
             }
 
             override fun onFailure(call: Call<LoginResponse?>?, t: Throwable?) {
+                findViewById<LinearLayout>(R.id.llProgressBar).visibility = View.GONE
                 ZLog.exception(300101, Exception(t))
                 showToast(resources.getString(R.string.login_connection_error))
             }

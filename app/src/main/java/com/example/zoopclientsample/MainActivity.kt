@@ -1,6 +1,6 @@
 package com.example.zoopclientsample
 
-import android.content.Context
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import com.zoop.zoopandroidsdk.ZoopAPI
@@ -10,16 +10,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-        val isLogged = checkIfIsLogged()
+        if (isLogged()) {
 
-        if (!isLogged) {
-
-            startActivity(Intent(this, LoginActivity::class.java))
-
-        } else {
-
-            super.onCreate(savedInstanceState)
             setContentView(R.layout.activity_main)
 
             ZoopAPI.initialize(application)
@@ -33,22 +27,35 @@ class MainActivity : BaseActivity() {
             }
 
             buttonLogout.setOnClickListener {
-                startActivity(Intent(this, LoginActivity::class.java))
+                showAlertDialog()
             }
+
+        } else {
+
+            startActivity(Intent(this, LoginActivity::class.java))
 
         }
     }
 
-    private fun checkIfIsLogged(): Boolean {
-        val sharedPref = getPreferences(Context.MODE_PRIVATE)
-        val sUsername = sharedPref.getString("USERNAME", "")
-        val sPassword = sharedPref.getString("PASSWORD", "")
-        val token = sharedPref.getString("USER_TOKEN", "")
-        val sellerId = sharedPref.getString("SELLER_ID", "")
-        if (sUsername.isNullOrEmpty() || sPassword.isNullOrEmpty() || token.isNullOrEmpty() || sellerId.isNullOrEmpty()) {
-            return false
+    override fun onResume() {
+        super.onResume()
+        if (!isLogged()) {
+            startActivity(Intent(this, LoginActivity::class.java))
         }
-        return true
+    }
+
+    private fun showAlertDialog() {
+        val dialog = AlertDialog.Builder(this)
+        dialog.setTitle(resources.getString(R.string.dialog_logout_title))
+            .setMessage(resources.getString(R.string.dialog_logout_message))
+            .setPositiveButton(resources.getString(R.string.label_yes)) { dialog, whichButton ->
+                logout()
+                startActivity(Intent(this, LoginActivity::class.java))
+            }
+            .setNegativeButton(resources.getString(R.string.label_no)) { dialog, whichButton ->
+                dialog.cancel()
+            }
+        dialog.show()
     }
 
 }

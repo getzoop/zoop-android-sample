@@ -21,4 +21,22 @@ abstract class BaseActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    fun isLogged(): Boolean {
+        val username = Preferences(this).getStoredString(Constants.USERNAME)
+        val password = Preferences(this).getStoredString(Constants.PASSWORD)
+        val token = Preferences(this).getStoredString(Constants.USER_TOKEN)
+        val sellerId = Preferences(this).getStoredString(Constants.SELLER_ID)
+        if (username.isNullOrEmpty() ||
+            password.isNullOrEmpty() ||
+            token.isNullOrEmpty() ||
+            sellerId.isNullOrEmpty()) {
+            return false
+        }
+        return true
+    }
+
+    fun logout() {
+        Preferences(this).clean()
+    }
 }

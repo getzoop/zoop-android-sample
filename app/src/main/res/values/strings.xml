@@ -16,6 +16,13 @@
     <string name="login_connection_error">Erro de conexão</string>
     <string name="user_without_permission_error">Usuário sem permissões</string>
 
+    <string name="dialog_logout_title">Sair</string>
+    <string name="dialog_logout_message">Tem certeza que deseja sair?</string>
+    <string name="label_yes">SIM</string>
+    <string name="label_no">NÃO</string>
+
+    <string name="label_loading">Por favor, aguarde ...</string>
+
     <string name="label_select_available_terminal">Selecione uma maquininha da lista</string>
     <string name="bluetooth_discovering_compatible_devices">Procurando maquininha</string>
 
