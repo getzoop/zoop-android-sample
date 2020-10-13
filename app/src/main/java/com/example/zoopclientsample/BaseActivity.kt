@@ -22,6 +22,14 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
+    fun getUserToken(): String? {
+        return Preferences(this).getStoredString(Constants.USER_TOKEN)
+    }
+
+    fun getSellerId(): String? {
+        return Preferences(this).getStoredString(Constants.SELLER_ID)
+    }
+
     fun isLogged(): Boolean {
         val username = Preferences(this).getStoredString(Constants.USERNAME)
         val password = Preferences(this).getStoredString(Constants.PASSWORD)

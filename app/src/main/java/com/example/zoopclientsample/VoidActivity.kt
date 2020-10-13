@@ -26,7 +26,6 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
 
     private var status = TransactionStatus.READY
     private var marketplaceId = Credentials.MARKETPLACE_ID
-    private var sellerId = Credentials.SELLER_ID
     private var publishableKey = Credentials.PUBLISHABLE_KEY
     private var joTransactionResponse: JSONObject? = null
     private var joVoidResponse: JSONObject? = null
@@ -63,7 +62,7 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
             terminalVoid!!.setApplicationDisplayListener(this@VoidActivity)
             terminalVoid!!.setVoidPaymentListener(this)
             status = TransactionStatus.PROCESSING
-            terminalVoid!!.voidTransaction(joTransactionResponse?.getString("id"), marketplaceId, sellerId, publishableKey)
+            terminalVoid!!.voidTransaction(joTransactionResponse?.getString("id"), marketplaceId, getSellerId(), publishableKey)
         }
         findViewById<Button>(R.id.buttonCancelOperation).setOnClickListener {
             finish()
@@ -113,7 +112,7 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
                         terminalVoid!!.voidTransaction(
                             joTransactionResponse?.getString("id"),
                             marketplaceId,
-                            sellerId,
+                            getSellerId(),
                             publishableKey)
                     }
                     TransactionStatus.PROCESSING -> {

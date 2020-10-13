@@ -30,7 +30,6 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
     private var iNumberOfInstallments = 0
     private var paymentOption = ZoopTerminalPayment.CHARGE_TYPE_CREDIT
     private var marketplaceId = Credentials.MARKETPLACE_ID
-    private var sellerId = Credentials.SELLER_ID
     private var publishableKey = Credentials.PUBLISHABLE_KEY
     private var joTransactionResponse: JSONObject? = null
 
@@ -72,7 +71,7 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                                 paymentOption,
                                 iNumberOfInstallments,
                                 marketplaceId,
-                                sellerId,
+                                getSellerId(),
                                 publishableKey)
                         }
                     }
