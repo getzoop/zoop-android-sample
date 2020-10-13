@@ -90,14 +90,18 @@ class LoginActivity : AppCompatActivity() {
                 try {
                     if (response.isSuccessful) {
                         val loginResponse: LoginResponse? = response.body()
-                        val token = loginResponse!!.token
-                        val sellerId = getSellerId(loginResponse.permissions)
+                        val firstName = loginResponse?.firstName
+                        val lastName = loginResponse?.lastName
+                        val token = loginResponse?.token
+                        val sellerId = getSellerId(loginResponse?.permissions)
                         findViewById<LinearLayout>(R.id.llProgressBar).visibility = View.GONE
                         if (sellerId.isEmpty()) {
                             showToast(resources.getString(R.string.login_connection_error))
                         } else {
                             Preferences(this@LoginActivity).storeString(Constants.USERNAME, sUsername)
                             Preferences(this@LoginActivity).storeString(Constants.PASSWORD, sPassword)
+                            Preferences(this@LoginActivity).storeString(Constants.FIRST_NAME, firstName)
+                            Preferences(this@LoginActivity).storeString(Constants.LAST_NAME, lastName)
                             Preferences(this@LoginActivity).storeString(Constants.USER_TOKEN, token)
                             Preferences(this@LoginActivity).storeString(Constants.SELLER_ID, sellerId)
                             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
@@ -123,8 +127,8 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 
-    private fun getSellerId(permissions: List<Permission>): String {
-        if (permissions.isNotEmpty()) {
+    private fun getSellerId(permissions: List<Permission>?): String {
+        if (!permissions.isNullOrEmpty()) {
             for (permission in permissions) {
                 if (permission.type == "model" &&
                     permission.modelName == "customers" &&

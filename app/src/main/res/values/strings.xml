@@ -23,6 +23,8 @@
 
     <string name="label_loading">Por favor, aguarde ...</string>
 
+    <string name="welcome_message">Olá, %1$s</string>
+
     <string name="label_select_available_terminal">Selecione uma maquininha da lista</string>
     <string name="bluetooth_discovering_compatible_devices">Procurando maquininha</string>
 
