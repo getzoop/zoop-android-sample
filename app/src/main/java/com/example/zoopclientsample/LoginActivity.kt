@@ -50,7 +50,7 @@ class LoginActivity : AppCompatActivity() {
     private fun showToast(sMessage: String) {
         Toast.makeText(
             this,
-            resources.getString(R.string.username_error),
+            sMessage,
             Toast.LENGTH_SHORT
         ).show()
     }
@@ -94,7 +94,6 @@ class LoginActivity : AppCompatActivity() {
                         val lastName = loginResponse?.lastName
                         val token = loginResponse?.token
                         val sellerId = getSellerId(loginResponse?.permissions)
-                        findViewById<LinearLayout>(R.id.llProgressBar).visibility = View.GONE
                         if (sellerId.isEmpty()) {
                             showToast(resources.getString(R.string.login_connection_error))
                         } else {
@@ -108,19 +107,16 @@ class LoginActivity : AppCompatActivity() {
                         }
 
                     } else {
-                        findViewById<LinearLayout>(R.id.llProgressBar).visibility = View.GONE
                         val error = response.errorBody().string()
                         val joError = JSONObject(error)
                         showToast(joError.getString("errorMessage"))
                     }
                 } catch (e: JSONException) {
-                    findViewById<LinearLayout>(R.id.llProgressBar).visibility = View.GONE
                     ZLog.exception(300100, e)
                 }
             }
 
             override fun onFailure(call: Call<LoginResponse?>?, t: Throwable?) {
-                findViewById<LinearLayout>(R.id.llProgressBar).visibility = View.GONE
                 ZLog.exception(300101, Exception(t))
                 showToast(resources.getString(R.string.login_connection_error))
             }

@@ -69,4 +69,8 @@ class MainActivity : BaseActivity() {
         dialog.show()
     }
 
+    override fun onBackPressed() {
+        TODO("Not yet implemented")
+    }
+
 }
