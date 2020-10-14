@@ -23,7 +23,6 @@ import java.util.*
 class ReceiptActivity : BaseActivity(), ReceiptDeliveryListener {
 
     private var receiptId = ""
-    private var marketplaceId = Credentials.MARKETPLACE_ID
     private var errorMsg = ""
     private var joZoopReceipt: JSONObject? = null
     private var joTransactionResponse: JSONObject? = null
@@ -48,7 +47,7 @@ class ReceiptActivity : BaseActivity(), ReceiptDeliveryListener {
         val receiptService: ReceiptService? =
             RetrofitInstance.retrofitInstance?.create(ReceiptService::class.java)
         val receiptCall =
-            receiptService!!.getReceipt("Bearer ${getUserToken()}", marketplaceId, receiptId)
+            receiptService!!.getReceipt("Bearer ${getUserToken()}", resources.getString(R.string.marketplace_id), receiptId)
         receiptCall!!.enqueue(object : Callback<Any?> {
             override fun onResponse(
                 call: Call<Any?>,

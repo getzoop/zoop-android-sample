@@ -17,6 +17,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            def localProperties = new Properties()
+            localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+            resValue("string", "marketplace_id", localProperties['MARKETPLACE_ID'])
+            resValue("string", "publishable_key", localProperties['PUBLISHABLE_KEY'])
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

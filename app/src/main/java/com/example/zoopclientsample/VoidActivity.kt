@@ -25,8 +25,6 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
     DeviceSelectionListener {
 
     private var status = TransactionStatus.READY
-    private var marketplaceId = Credentials.MARKETPLACE_ID
-    private var publishableKey = Credentials.PUBLISHABLE_KEY
     private var joTransactionResponse: JSONObject? = null
     private var joVoidResponse: JSONObject? = null
     private var valueWithCurrency = ""
@@ -62,7 +60,10 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
             terminalVoid!!.setApplicationDisplayListener(this@VoidActivity)
             terminalVoid!!.setVoidPaymentListener(this)
             status = TransactionStatus.PROCESSING
-            terminalVoid!!.voidTransaction(joTransactionResponse?.getString("id"), marketplaceId, getSellerId(), publishableKey)
+            terminalVoid!!.voidTransaction(joTransactionResponse?.getString("id"),
+                resources.getString(R.string.marketplace_id),
+                getSellerId(),
+                resources.getString(R.string.publishable_key))
         }
         findViewById<Button>(R.id.buttonCancelOperation).setOnClickListener {
             finish()
@@ -111,9 +112,9 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
                         status = TransactionStatus.PROCESSING
                         terminalVoid!!.voidTransaction(
                             joTransactionResponse?.getString("id"),
-                            marketplaceId,
+                            resources.getString(R.string.marketplace_id),
                             getSellerId(),
-                            publishableKey)
+                            resources.getString(R.string.publishable_key))
                     }
                     TransactionStatus.PROCESSING -> {
                         status = TransactionStatus.READY

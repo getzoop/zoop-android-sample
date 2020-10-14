@@ -19,7 +19,6 @@ import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
 
-    private var marketplaceId = Credentials.MARKETPLACE_ID
     private var loginService: LoginService? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,7 +80,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun executeLogin(sUsername: String, sPassword: String) {
         val loginCall =
-            getLoginService()!!.login(marketplaceId, LoginRequest(sUsername, sPassword, true))
+            getLoginService()!!.login(resources.getString(R.string.marketplace_id), LoginRequest(sUsername, sPassword, true))
         loginCall!!.enqueue(object : Callback<LoginResponse?> {
             override fun onResponse(
                 call: Call<LoginResponse?>,
