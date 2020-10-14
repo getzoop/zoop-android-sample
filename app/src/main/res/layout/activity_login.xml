@@ -30,7 +30,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewLogo" />
 
-
     <EditText
         android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
@@ -53,7 +52,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
-
 
     <include
         android:id="@+id/llProgressBar"
