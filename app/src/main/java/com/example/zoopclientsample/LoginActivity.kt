@@ -86,6 +86,7 @@ class LoginActivity : AppCompatActivity() {
                 call: Call<LoginResponse?>,
                 response: Response<LoginResponse?>
             ) {
+                findViewById<LinearLayout>(R.id.llProgressBar).visibility = View.GONE
                 try {
                     if (response.isSuccessful) {
                         val loginResponse: LoginResponse? = response.body()
@@ -116,6 +117,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<LoginResponse?>?, t: Throwable?) {
+                findViewById<LinearLayout>(R.id.llProgressBar).visibility = View.GONE
                 ZLog.exception(300101, Exception(t))
                 showToast(resources.getString(R.string.login_connection_error))
             }
