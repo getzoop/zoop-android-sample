@@ -9,11 +9,14 @@ import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.intent.rule.IntentsTestRule
+import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+
 
 @RunWith(AndroidJUnit4::class)
 class LoginActivityTest {
@@ -41,7 +44,8 @@ class LoginActivityTest {
         onView(withId(R.id.buttonLogin))
             .perform(click())
         // assert
-        onView(withText("O campo e-mail é obrigatório"))
+        onView(withText(R.string.username_error))
+            .inRoot(withDecorView(not(loginActivityTest.activity.window.decorView)))
             .check(matches(isDisplayed()))
     }
 
@@ -54,7 +58,8 @@ class LoginActivityTest {
         onView(withId(R.id.buttonLogin))
             .perform(click())
         // assert
-        onView(withText("O campo senha é obrigatório"))
+        onView(withText(R.string.password_error))
+            .inRoot(withDecorView(not(loginActivityTest.activity.window.decorView)))
             .check(matches(isDisplayed()))
     }
 
@@ -69,7 +74,10 @@ class LoginActivityTest {
         onView(withId(R.id.buttonLogin))
             .perform(click())
         // assert
+        onView(withText(R.string.label_loading))
+            .check(matches(isDisplayed()))
         onView(withText("Unauthorized"))
+            .inRoot(withDecorView(not(loginActivityTest.activity.window.decorView)))
             .check(matches(isDisplayed()))
     }
 
@@ -86,6 +94,9 @@ class LoginActivityTest {
         onView(withId(R.id.buttonLogin))
             .perform(click())
         // assert
+        onView(withText(R.string.label_loading))
+            .check(matches(isDisplayed()))
+        Thread.sleep(1000)
         intended(hasComponent(MainActivity::class.java.name))
     }
 
