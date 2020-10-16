@@ -42,10 +42,11 @@ class MainActivity : BaseActivity() {
     }
 
     private fun mountWelcomeMessage() {
-        var exhibitionName = Preferences(this)
+        val prefs = Preferences(this)
+        var exhibitionName = prefs
             .getStoredString(Constants.FIRST_NAME)
         if (exhibitionName.isNullOrEmpty()) {
-            exhibitionName = Preferences(this)
+            exhibitionName = prefs
                 .getStoredString(Constants.USERNAME)
         }
         findViewById<TextView>(R.id.textViewWelcome).text = getString(

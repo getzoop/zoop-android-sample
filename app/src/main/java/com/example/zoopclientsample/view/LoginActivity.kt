@@ -100,17 +100,18 @@ class LoginActivity : AppCompatActivity() {
                         if (sellerId.isEmpty()) {
                             showToast(resources.getString(R.string.login_connection_error))
                         } else {
-                            Preferences(this@LoginActivity)
+                            val prefs = Preferences(this@LoginActivity)
+                            prefs
                                 .storeString(Constants.USERNAME, sUsername)
-                            Preferences(this@LoginActivity)
+                            prefs
                                 .storeString(Constants.PASSWORD, sPassword)
-                            Preferences(this@LoginActivity)
+                            prefs
                                 .storeString(Constants.FIRST_NAME, firstName)
-                            Preferences(this@LoginActivity)
+                            prefs
                                 .storeString(Constants.LAST_NAME, lastName)
-                            Preferences(this@LoginActivity)
+                            prefs
                                 .storeString(Constants.USER_TOKEN, token)
-                            Preferences(this@LoginActivity)
+                            prefs
                                 .storeString(Constants.SELLER_ID, sellerId)
                             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                         }

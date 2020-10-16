@@ -15,6 +15,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.zoopclientsample.view.LoginActivity
 import com.example.zoopclientsample.view.MainActivity
 import org.hamcrest.Matchers.not
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,6 +28,18 @@ class LoginActivityTest {
     @get:Rule
     val loginActivityTest = IntentsTestRule(LoginActivity::class.java)
 
+    @Before
+    fun setUp() {
+        val prefs = Preferences(loginActivityTest.activity.applicationContext)
+        prefs.clean()
+    }
+
+    @After
+    fun tearDown() {
+        val prefs = Preferences(loginActivityTest.activity.applicationContext)
+        prefs.clean()
+    }
+
     @Test
     fun givenInitialState_shouldShowEmailAndPasswordEmpty() {
         // arrange
@@ -35,6 +49,8 @@ class LoginActivityTest {
             .check(matches(withText("")))
         onView(withId(R.id.editTextPassword))
             .check(matches(withText("")))
+        onView(withId(R.id.buttonLogin))
+            .check(matches(withText(R.string.charge_button_login)))
     }
 
     @Test
@@ -90,15 +106,15 @@ class LoginActivityTest {
             .respondWith(Instrumentation.ActivityResult(Activity.RESULT_CANCELED, null))
         // act
         onView(withId(R.id.editTextUsername))
-            .perform(typeText("test@zoop.com.br"))
+            .perform(typeText("test@zoop.com.br"))  //replace with a valid email when testing
         onView(withId(R.id.editTextPassword))
-            .perform(typeText("123456"), closeSoftKeyboard())
+            .perform(typeText("123456"), closeSoftKeyboard()) //replace with a valid password when testing
         onView(withId(R.id.buttonLogin))
             .perform(click())
         // assert
         onView(withText(R.string.label_loading))
             .check(matches(isDisplayed()))
-        Thread.sleep(1000)
+        Thread.sleep(2000)
         intended(hasComponent(MainActivity::class.java.name))
     }
 
