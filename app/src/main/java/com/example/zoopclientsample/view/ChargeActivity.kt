@@ -14,6 +14,7 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import com.example.zoopclientsample.Extras
 import com.example.zoopclientsample.R
+import com.example.zoopclientsample.ToastHelper
 import com.example.zoopclientsample.TransactionStatus
 import com.zoop.zoopandroidsdk.ZoopTerminalPayment
 import com.zoop.zoopandroidsdk.commons.ZLog
@@ -31,10 +32,12 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
     private var iNumberOfInstallments = 0
     private var paymentOption = ZoopTerminalPayment.CHARGE_TYPE_CREDIT
     private var joTransactionResponse: JSONObject? = null
+    private var toastHelper: ToastHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_charge)
+        toastHelper = ToastHelper(this)
         status = TransactionStatus.READY
         paymentOption = ZoopTerminalPayment.CHARGE_TYPE_CREDIT
         joTransactionResponse = null
@@ -76,6 +79,8 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                                 resources.getString(R.string.marketplace_id),
                                 getSellerId(),
                                 resources.getString(R.string.publishable_key))
+                        } else {
+                            toastHelper?.showToast(getString(R.string.value_error))
                         }
                     }
                     TransactionStatus.PROCESSING -> {

@@ -49,6 +49,8 @@
     <string name="charge_button_charge_credit_with_installments">Crédito Parcelado</string>
     <string name="charge_button_charge_debit">Débito</string>
 
+    <string name="value_error">O campo valor é obrigatório</string>
+
     <string name="charge_button_pay_label">Pagar</string>
     <string name="label_cancel">Cancelar</string>
     <string name="charge_button_receipt_label">Ver Comprovante</string>

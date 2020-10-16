@@ -3,6 +3,7 @@ package com.example.zoopclientsample
 import android.text.format.DateUtils
 import org.json.JSONObject
 import java.math.BigDecimal
+import java.math.MathContext
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,7 +34,8 @@ class Extras {
         fun parseCurrencyFormatToBigDecimal(amount: String): BigDecimal {
             val cleanString = amount.replace(Regex("[R$.,]"), "").trim()
             val parsed = cleanString.toDouble()
-            return BigDecimal(parsed / 100)
+            val result = BigDecimal(parsed / 100,  MathContext.DECIMAL64)
+            return result.setScale(2, BigDecimal.ROUND_HALF_EVEN)
         }
 
         fun parseDoubleToCurrenyFormat(amount: String): String {

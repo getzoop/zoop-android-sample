@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.zoopclientsample.Constants
 import com.example.zoopclientsample.Preferences
 import com.example.zoopclientsample.R
+import com.example.zoopclientsample.ToastHelper
 import com.example.zoopclientsample.api.*
 import com.zoop.zoopandroidsdk.commons.ZLog
 import org.json.JSONException
@@ -23,11 +24,12 @@ import retrofit2.Response
 class LoginActivity : AppCompatActivity() {
 
     private var loginService: LoginService? = null
+    private var toastHelper: ToastHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
+        toastHelper = ToastHelper(this)
         setupLoginButton()
     }
 
@@ -49,18 +51,9 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun showToast(sMessage: String) {
-        Toast.makeText(
-            this,
-            sMessage,
-            Toast.LENGTH_SHORT
-        ).show()
-    }
-
-
     private fun isUsernameValid(sUsername: String): Boolean {
         if (sUsername.isEmpty()) {
-            showToast(resources.getString(R.string.username_error))
+            toastHelper?.showToast(resources.getString(R.string.username_error))
             return false
         }
         return true
@@ -68,7 +61,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun isPasswordValid(sPassword: String): Boolean {
         if (sPassword.isEmpty()) {
-            showToast(resources.getString(R.string.password_error))
+            toastHelper?.showToast(resources.getString(R.string.password_error))
             return false
         }
         return true
@@ -98,7 +91,7 @@ class LoginActivity : AppCompatActivity() {
                         val token = loginResponse?.token
                         val sellerId = getSellerId(loginResponse?.permissions)
                         if (sellerId.isEmpty()) {
-                            showToast(resources.getString(R.string.login_connection_error))
+                            toastHelper?.showToast(resources.getString(R.string.login_connection_error))
                         } else {
                             val prefs = Preferences(this@LoginActivity)
                             prefs
@@ -119,7 +112,7 @@ class LoginActivity : AppCompatActivity() {
                     } else {
                         val error = response.errorBody().string()
                         val joError = JSONObject(error)
-                        showToast(joError.getString("errorMessage"))
+                        toastHelper?.showToast(joError.getString("errorMessage"))
                     }
                 } catch (e: JSONException) {
                     ZLog.exception(300100, e)
@@ -129,7 +122,7 @@ class LoginActivity : AppCompatActivity() {
             override fun onFailure(call: Call<LoginResponse?>?, t: Throwable?) {
                 findViewById<LinearLayout>(R.id.llProgressBar).visibility = View.GONE
                 ZLog.exception(300101, Exception(t))
-                showToast(resources.getString(R.string.login_connection_error))
+                toastHelper?.showToast(resources.getString(R.string.login_connection_error))
             }
         })
     }
