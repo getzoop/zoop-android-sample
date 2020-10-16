@@ -1,10 +1,11 @@
-package com.example.zoopclientsample
+package com.example.zoopclientsample.view
 
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import com.example.zoopclientsample.*
 import com.zoop.zoopandroidsdk.ZoopAPI
 
 
@@ -41,11 +42,14 @@ class MainActivity : BaseActivity() {
     }
 
     private fun mountWelcomeMessage() {
-        var exhibitionName = Preferences(this).getStoredString(Constants.FIRST_NAME)
+        var exhibitionName = Preferences(this)
+            .getStoredString(Constants.FIRST_NAME)
         if (exhibitionName.isNullOrEmpty()) {
-            exhibitionName = Preferences(this).getStoredString(Constants.USERNAME)
+            exhibitionName = Preferences(this)
+                .getStoredString(Constants.USERNAME)
         }
-        findViewById<TextView>(R.id.textViewWelcome).text = getString(R.string.welcome_message, exhibitionName)
+        findViewById<TextView>(R.id.textViewWelcome).text = getString(
+            R.string.welcome_message, exhibitionName)
     }
 
     override fun onResume() {

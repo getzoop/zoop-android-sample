@@ -1,4 +1,4 @@
-package com.example.zoopclientsample
+package com.example.zoopclientsample.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,9 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.zoopclientsample.Constants
+import com.example.zoopclientsample.Preferences
+import com.example.zoopclientsample.R
 import com.example.zoopclientsample.api.*
 import com.zoop.zoopandroidsdk.commons.ZLog
 import org.json.JSONException
@@ -97,12 +100,18 @@ class LoginActivity : AppCompatActivity() {
                         if (sellerId.isEmpty()) {
                             showToast(resources.getString(R.string.login_connection_error))
                         } else {
-                            Preferences(this@LoginActivity).storeString(Constants.USERNAME, sUsername)
-                            Preferences(this@LoginActivity).storeString(Constants.PASSWORD, sPassword)
-                            Preferences(this@LoginActivity).storeString(Constants.FIRST_NAME, firstName)
-                            Preferences(this@LoginActivity).storeString(Constants.LAST_NAME, lastName)
-                            Preferences(this@LoginActivity).storeString(Constants.USER_TOKEN, token)
-                            Preferences(this@LoginActivity).storeString(Constants.SELLER_ID, sellerId)
+                            Preferences(this@LoginActivity)
+                                .storeString(Constants.USERNAME, sUsername)
+                            Preferences(this@LoginActivity)
+                                .storeString(Constants.PASSWORD, sPassword)
+                            Preferences(this@LoginActivity)
+                                .storeString(Constants.FIRST_NAME, firstName)
+                            Preferences(this@LoginActivity)
+                                .storeString(Constants.LAST_NAME, lastName)
+                            Preferences(this@LoginActivity)
+                                .storeString(Constants.USER_TOKEN, token)
+                            Preferences(this@LoginActivity)
+                                .storeString(Constants.SELLER_ID, sellerId)
                             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                         }
 

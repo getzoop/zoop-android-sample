@@ -1,4 +1,4 @@
-package com.example.zoopclientsample
+package com.example.zoopclientsample.view
 
 import android.Manifest
 import android.content.Intent
@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
+import com.example.zoopclientsample.R
 import com.example.zoopclientsample.adapter.TerminalAdapter
 import com.example.zoopclientsample.adapter.TerminalAdapterListener
 import com.example.zoopclientsample.model.TerminalModel
@@ -44,7 +45,8 @@ class ConfigPinPadActivity : BaseActivity(), DeviceSelectionListener,
     private fun setupListView() {
         lv = findViewById<ListView>(R.id.listViewAvailableTerminals)
         lv!!.choiceMode = ListView.CHOICE_MODE_SINGLE
-        terminalAdapter = TerminalAdapter(this, R.layout.item_list_terminals, this)
+        terminalAdapter = TerminalAdapter(this,
+            R.layout.item_list_terminals, this)
         lv!!.adapter = terminalAdapter
     }
 

@@ -1,4 +1,4 @@
-package com.example.zoopclientsample
+package com.example.zoopclientsample.view
 
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
@@ -11,14 +11,15 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import com.example.zoopclientsample.Extras
+import com.example.zoopclientsample.R
+import com.example.zoopclientsample.TransactionStatus
 import com.zoop.zoopandroidsdk.ZoopTerminalPayment
 import com.zoop.zoopandroidsdk.commons.ZLog
 import com.zoop.zoopandroidsdk.terminal.*
 import org.json.JSONObject
 import java.math.BigDecimal
-import java.text.NumberFormat
 import java.util.*
 
 class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelectionListener,
@@ -63,8 +64,12 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                     TransactionStatus.READY -> {
                         if (sValueToCharge.isNotEmpty()) {
                             button.text = resources.getString(R.string.label_cancel)
-                            val valueToCharge: BigDecimal? = Extras.parseCurrencyFormatToBigDecimal(sValueToCharge)
-                            status = TransactionStatus.PROCESSING
+                            val valueToCharge: BigDecimal? =
+                                Extras.parseCurrencyFormatToBigDecimal(
+                                    sValueToCharge
+                                )
+                            status =
+                                TransactionStatus.PROCESSING
                             terminalPayment!!.charge(valueToCharge,
                                 paymentOption,
                                 iNumberOfInstallments,
@@ -74,7 +79,8 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                         }
                     }
                     TransactionStatus.PROCESSING -> {
-                        status = TransactionStatus.READY
+                        status =
+                            TransactionStatus.READY
                         try {
                             terminalPayment!!.requestAbortCharge()
                         } catch (e: Exception) {
@@ -82,7 +88,8 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                         }
                     }
                     TransactionStatus.FINISHED -> {
-                        status = TransactionStatus.READY
+                        status =
+                            TransactionStatus.READY
                         if (joTransactionResponse != null) {
                             val intent = Intent(this, ReceiptActivity::class.java)
                             val bundle = Bundle()
@@ -92,7 +99,8 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                         }
                     }
                     TransactionStatus.ERROR -> {
-                        status = TransactionStatus.READY
+                        status =
+                            TransactionStatus.READY
                         startActivity(Intent(this, ChargeActivity::class.java))
                     }
                 }
@@ -105,7 +113,8 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
         val spinner = findViewById<Spinner>(R.id.spinnerNumberOfInstallments)
         spinner?.let {
             val numberOfInstallmentsOpt = arrayOf("1x", "2x ","3x","4x","5x","6x", "7x","8x","9x","10x","11x","12x")
-            val arrayAdapter = ArrayAdapter(this, R.layout.simple_spinner_item, numberOfInstallmentsOpt)
+            val arrayAdapter = ArrayAdapter(this,
+                R.layout.simple_spinner_item, numberOfInstallmentsOpt)
             arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
             it.adapter = arrayAdapter
             it.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -156,11 +165,17 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
     private fun updateButtons(buttonPressed: Button, buttonUnpressed: Button, buttonUnpressedTwo: Button) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             buttonPressed.backgroundTintList =
-                ContextCompat.getColorStateList(this, R.color.colorAccentAlt)
+                ContextCompat.getColorStateList(this,
+                    R.color.colorAccentAlt
+                )
             buttonUnpressed.backgroundTintList =
-                ContextCompat.getColorStateList(this, R.color.colorPrimaryAlt)
+                ContextCompat.getColorStateList(this,
+                    R.color.colorPrimaryAlt
+                )
             buttonUnpressedTwo.backgroundTintList =
-                ContextCompat.getColorStateList(this, R.color.colorPrimaryAlt)
+                ContextCompat.getColorStateList(this,
+                    R.color.colorPrimaryAlt
+                )
         }
     }
 
@@ -175,7 +190,10 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if (s.toString() != sValueToCharge) {
                         it.removeTextChangedListener(this)
-                        val formatted = Extras.parseDoubleToCurrenyFormat(s.toString())
+                        val formatted =
+                            Extras.parseDoubleToCurrenyFormat(
+                                s.toString()
+                            )
                         sValueToCharge = formatted
                         it.setText(formatted)
                         it.setSelection(formatted.length)
@@ -196,7 +214,9 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                 if (joResponse != null) {
                     setResponseTextView(resources.getString(R.string.text_transaction_step4_approved), "#006400")
                     joTransactionResponse = joResponse
-                    findViewById<Button>(R.id.buttonAction).text = resources.getString(R.string.charge_button_receipt_label)
+                    findViewById<Button>(R.id.buttonAction).text = resources.getString(
+                        R.string.charge_button_receipt_label
+                    )
                 }
             } catch (e: Exception) {
                 ZLog.exception(300024, e)
@@ -209,7 +229,9 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
         ZLog.t(300018, applicationMessage)
         setResponseImageView(R.drawable.icon_abort, "#CCCC00")
         setResponseTextView(applicationMessage, "#CCCC00")
-        findViewById<Button>(R.id.buttonAction).text = resources.getString(R.string.charge_button_pay_label)
+        findViewById<Button>(R.id.buttonAction).text = resources.getString(
+            R.string.charge_button_pay_label
+        )
     }
 
     override fun paymentDuplicated(joResponse: JSONObject?) {
@@ -269,7 +291,9 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                 status = TransactionStatus.ERROR
                 hideProgressBarShowResponse()
                 setResponseImageView(R.drawable.icon_denied, "#8B0000")
-                findViewById<Button>(R.id.buttonAction).text = resources.getString(R.string.label_try_again)
+                findViewById<Button>(R.id.buttonAction).text = resources.getString(
+                    R.string.label_try_again
+                )
                 if (joResponse != null) {
                     var applicationMessage = ""
                     if (joResponse.has("response_code")) {

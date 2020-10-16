@@ -1,9 +1,12 @@
-package com.example.zoopclientsample
+package com.example.zoopclientsample.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
+import com.example.zoopclientsample.Constants
+import com.example.zoopclientsample.Preferences
+import com.example.zoopclientsample.R
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -23,18 +26,24 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     fun getUserToken(): String? {
-        return Preferences(this).getStoredString(Constants.USER_TOKEN)
+        return Preferences(this)
+            .getStoredString(Constants.USER_TOKEN)
     }
 
     fun getSellerId(): String? {
-        return Preferences(this).getStoredString(Constants.SELLER_ID)
+        return Preferences(this)
+            .getStoredString(Constants.SELLER_ID)
     }
 
     fun isLogged(): Boolean {
-        val username = Preferences(this).getStoredString(Constants.USERNAME)
-        val password = Preferences(this).getStoredString(Constants.PASSWORD)
-        val token = Preferences(this).getStoredString(Constants.USER_TOKEN)
-        val sellerId = Preferences(this).getStoredString(Constants.SELLER_ID)
+        val username = Preferences(this)
+            .getStoredString(Constants.USERNAME)
+        val password = Preferences(this)
+            .getStoredString(Constants.PASSWORD)
+        val token = Preferences(this)
+            .getStoredString(Constants.USER_TOKEN)
+        val sellerId = Preferences(this)
+            .getStoredString(Constants.SELLER_ID)
         if (username.isNullOrEmpty() ||
             password.isNullOrEmpty() ||
             token.isNullOrEmpty() ||

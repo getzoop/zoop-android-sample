@@ -1,4 +1,4 @@
-package com.example.zoopclientsample
+package com.example.zoopclientsample.view
 
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
@@ -11,6 +11,9 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.zoopclientsample.Extras
+import com.example.zoopclientsample.R
+import com.example.zoopclientsample.TransactionStatus
 import com.zoop.zoopandroidsdk.ZoopTerminalVoidPayment
 import com.zoop.zoopandroidsdk.commons.ZLog
 import com.zoop.zoopandroidsdk.terminal.ApplicationDisplayListener
@@ -80,7 +83,10 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
         if (joTransactionResponse.has("amount")) {
             amount = joTransactionResponse.getString("amount")
         }
-        valueWithCurrency = Extras.parseDoubleToCurrenyFormat(amount)
+        valueWithCurrency =
+            Extras.parseDoubleToCurrenyFormat(
+                amount
+            )
         var paymentType = ""
         if (joTransactionResponse.has("payment_type")) {
             paymentType = joTransactionResponse.getString("payment_type")
@@ -97,8 +103,14 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
                 joTransactionResponse.getJSONObject("payment_method").getString("first4_digits")
         }
         findViewById<TextView>(R.id.textViewTransactionToVoidValue).text = valueWithCurrency
-        findViewById<TextView>(R.id.textViewTransactionToVoidPaymentType).text = Extras.translatePaymentType(paymentType)
-        findViewById<TextView>(R.id.textViewTransactionToVoidNumberOfInstallments).text = Extras.formatNumberOfInstallments(numberOfInstallments)
+        findViewById<TextView>(R.id.textViewTransactionToVoidPaymentType).text =
+            Extras.translatePaymentType(
+                paymentType
+            )
+        findViewById<TextView>(R.id.textViewTransactionToVoidNumberOfInstallments).text =
+            Extras.formatNumberOfInstallments(
+                numberOfInstallments
+            )
     }
 
     private fun setupActionButton() {
@@ -109,7 +121,8 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
                     TransactionStatus.READY, TransactionStatus.ERROR -> {
                         button.text = resources.getString(R.string.label_cancel)
                         hideResponseShowProgressBar()
-                        status = TransactionStatus.PROCESSING
+                        status =
+                            TransactionStatus.PROCESSING
                         terminalVoid!!.voidTransaction(
                             joTransactionResponse?.getString("id"),
                             resources.getString(R.string.marketplace_id),
@@ -117,7 +130,8 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
                             resources.getString(R.string.publishable_key))
                     }
                     TransactionStatus.PROCESSING -> {
-                        status = TransactionStatus.READY
+                        status =
+                            TransactionStatus.READY
                         try {
                             terminalVoid!!.requestAbortCharge()
                         } catch (e: Exception) {
@@ -125,7 +139,8 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
                         }
                     }
                     TransactionStatus.FINISHED -> {
-                        status = TransactionStatus.READY
+                        status =
+                            TransactionStatus.READY
                         if (joVoidResponse != null) {
                             val intent = Intent(this, ReceiptActivity::class.java)
                             val bundle = Bundle()
@@ -178,7 +193,9 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
                 if (joResponse != null) {
                     setResponseTextView(resources.getString(R.string.text_void_transaction_step4_approved), "#006400")
                     joVoidResponse = joResponse
-                    findViewById<Button>(R.id.buttonAction).text = resources.getString(R.string.charge_button_receipt_label)
+                    findViewById<Button>(R.id.buttonAction).text = resources.getString(
+                        R.string.charge_button_receipt_label
+                    )
                 }
             } catch (e: Exception) {
                 ZLog.exception(300034, e)
@@ -193,7 +210,9 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
                 status = TransactionStatus.ERROR
                 hideProgressBarShowResponse()
                 setResponseImageView(R.drawable.icon_denied, "#8B0000")
-                findViewById<Button>(R.id.buttonAction).text = resources.getString(R.string.label_try_again)
+                findViewById<Button>(R.id.buttonAction).text = resources.getString(
+                    R.string.label_try_again
+                )
                 if (joResponse != null) {
                     var applicationMessage = ""
                     if (joResponse.has("response_code")) {
@@ -235,7 +254,9 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
         ZLog.t(300028, applicationMessage)
         setResponseImageView(R.drawable.icon_abort, "#CCCC00")
         setResponseTextView(applicationMessage, "#CCCC00")
-        findViewById<Button>(R.id.buttonAction).text = resources.getString(R.string.label_try_again)
+        findViewById<Button>(R.id.buttonAction).text = resources.getString(
+            R.string.label_try_again
+        )
     }
 
     override fun voidAborted() {

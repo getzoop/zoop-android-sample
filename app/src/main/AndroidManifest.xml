@@ -20,12 +20,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity"
+        <activity android:name=".view.LoginActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,22 +33,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ConfigPinPadActivity"
+            android:name=".view.ConfigPinPadActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ChargeActivity"
+            android:name=".view.ChargeActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ReceiptActivity"
+            android:name=".view.ReceiptActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".VoidActivity"
+            android:name=".view.VoidActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />

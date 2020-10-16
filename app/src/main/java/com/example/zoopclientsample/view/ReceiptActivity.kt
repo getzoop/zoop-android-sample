@@ -1,11 +1,12 @@
-package com.example.zoopclientsample
+package com.example.zoopclientsample.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.format.DateUtils
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
+import com.example.zoopclientsample.Extras
+import com.example.zoopclientsample.R
 import com.example.zoopclientsample.api.ReceiptService
 import com.example.zoopclientsample.api.RetrofitInstance
 import com.example.zoopclientsample.ui.AutoResizeTextView
@@ -17,8 +18,6 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
-import java.util.*
 
 class ReceiptActivity : BaseActivity(), ReceiptDeliveryListener {
 
@@ -47,7 +46,9 @@ class ReceiptActivity : BaseActivity(), ReceiptDeliveryListener {
         val receiptService: ReceiptService? =
             RetrofitInstance.retrofitInstance?.create(ReceiptService::class.java)
         val receiptCall =
-            receiptService!!.getReceipt("Bearer ${getUserToken()}", resources.getString(R.string.marketplace_id), receiptId)
+            receiptService!!.getReceipt("Bearer ${getUserToken()}", resources.getString(
+                R.string.marketplace_id
+            ), receiptId)
         receiptCall!!.enqueue(object : Callback<Any?> {
             override fun onResponse(
                 call: Call<Any?>,
@@ -93,7 +94,10 @@ class ReceiptActivity : BaseActivity(), ReceiptDeliveryListener {
             startActivity(Intent(this, ChargeActivity::class.java))
         }
         val buttonVoidTransaction = findViewById<Button>(R.id.buttonVoidTransaction)
-        if (Extras.checkIfTransactionCanBeCancelled(joTransactionResponse)) {
+        if (Extras.checkIfTransactionCanBeCancelled(
+                joTransactionResponse
+            )
+        ) {
             buttonVoidTransaction.visibility = View.VISIBLE
         } else {
             buttonVoidTransaction.visibility =  View.GONE
