@@ -13,7 +13,7 @@ import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.zoopclientsample.view.ChargeActivity
-import com.example.zoopclientsample.view.ConfigPinPadActivity
+import com.example.zoopclientsample.view.ConfigPinpadActivity
 import com.example.zoopclientsample.view.LoginActivity
 import com.example.zoopclientsample.view.MainActivity
 import org.junit.After
@@ -67,15 +67,15 @@ class MainActivityTest {
     }
 
     @Test
-    fun givenInitialState_whenTerminalsButtonClicked_shouldGoToConfigPinPadActivity() {
+    fun givenInitialState_whenTerminalsButtonClicked_shouldGoToConfigPinpadActivity() {
         // arrange
-        intending(hasComponent(ConfigPinPadActivity::class.java.name))
+        intending(hasComponent(ConfigPinpadActivity::class.java.name))
             .respondWith(Instrumentation.ActivityResult(Activity.RESULT_CANCELED, null))
         // act
         onView(withId(R.id.buttonTerminals))
             .perform(click())
         // assert
-        intended(hasComponent(ConfigPinPadActivity::class.java.name))
+        intended(hasComponent(ConfigPinpadActivity::class.java.name))
     }
 
     @Test

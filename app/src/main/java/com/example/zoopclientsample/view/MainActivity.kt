@@ -27,7 +27,7 @@ class MainActivity : BaseActivity() {
             }
 
             findViewById<Button>(R.id.buttonTerminals).setOnClickListener {
-                startActivity(Intent(this, ConfigPinPadActivity::class.java))
+                startActivity(Intent(this, ConfigPinpadActivity::class.java))
             }
 
             findViewById<Button>(R.id.buttonLogout).setOnClickListener {

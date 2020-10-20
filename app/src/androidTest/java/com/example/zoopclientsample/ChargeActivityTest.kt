@@ -65,7 +65,6 @@ class ChargeActivityTest {
             .check(matches(not(isEnabled())))
     }
 
-
     @Test
     fun givenDebit_whenCharge_shouldDisableNumberOfInstallments() {
         // arrange

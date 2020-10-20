@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.ConfigPinPadActivity"
+            android:name=".view.ConfigPinpadActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />

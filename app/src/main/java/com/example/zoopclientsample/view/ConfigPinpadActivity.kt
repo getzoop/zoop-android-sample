@@ -23,7 +23,7 @@ import com.zoop.zoopandroidsdk.terminal.ZoopTerminalKeyValidatorListener
 import org.json.JSONObject
 import java.util.*
 
-class ConfigPinPadActivity : BaseActivity(), DeviceSelectionListener,
+class ConfigPinpadActivity : BaseActivity(), DeviceSelectionListener,
     ZoopTerminalKeyValidatorListener, TerminalAdapterListener {
 
     private var terminalListManager: TerminalListManager? = null
@@ -38,7 +38,7 @@ class ConfigPinPadActivity : BaseActivity(), DeviceSelectionListener,
         setupListView()
         setupButton()
         terminalListManager = TerminalListManager(this, applicationContext)
-        terminalListManager!!.startTerminalsDiscovery()
+        terminalListManager?.startTerminalsDiscovery()
         callPermissionsListener()
     }
 
@@ -60,7 +60,7 @@ class ConfigPinPadActivity : BaseActivity(), DeviceSelectionListener,
                     button.setText(R.string.button_terminal_configuration_finished)
                     isCheckingTerminal = false
                 } else {
-                    val chargeIntent = Intent(this@ConfigPinPadActivity, ChargeActivity::class.java)
+                    val chargeIntent = Intent(this@ConfigPinpadActivity, ChargeActivity::class.java)
                     startActivity(chargeIntent)
                     finish()
                 }
