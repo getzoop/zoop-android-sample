@@ -27,22 +27,22 @@ Caso tenha dúvidas em relação a essas credenciais entrar em contato com o sup
 
 <table>
   <tr>
-    <td><img src="new screenshots/Screenshot_20201023-115818.png" width=144 height=304></td>
-    <td><img src="new screenshots/Screenshot_20201023-115818.png" width=144 height=304></td>
-    <td><img src="new screenshots/Screenshot_20201023-115818.png" width=144 height=304></td>
+    <td><img src="screenshots/Screenshot_20201023-115818.png" width=144 height=304></td>
+    <td><img src="screenshots/Screenshot_20201023-115818.png" width=144 height=304></td>
+    <td><img src="screenshots/Screenshot_20201023-115818.png" width=144 height=304></td>
   </tr>
   <tr>
-    <td><img src="new screenshots/Screenshot_20201023-115818.png" width=144 height=304></td>
-    <td><img src="new screenshots/Screenshot_20201023-115938.png" width=144 height=304></td>
-    <td><img src="new screenshots/Screenshot_20201023-115946.png" width=144 height=304></td>
+    <td><img src="screenshots/Screenshot_20201023-115818.png" width=144 height=304></td>
+    <td><img src="screenshots/Screenshot_20201023-115938.png" width=144 height=304></td>
+    <td><img src="screenshots/Screenshot_20201023-115946.png" width=144 height=304></td>
   </tr>
   <tr>
-    <td><img src="new screenshots/Screenshot_20201023-115954.png" width=144 height=304></td>
-    <td><img src="new screenshots/Screenshot_20201023-120003.png" width=144 height=304></td>
-    <td><img src="new screenshots/Screenshot_20201023-120233.png" width=144 height=304></td>
+    <td><img src="screenshots/Screenshot_20201023-115954.png" width=144 height=304></td>
+    <td><img src="screenshots/Screenshot_20201023-120003.png" width=144 height=304></td>
+    <td><img src="screenshots/Screenshot_20201023-120233.png" width=144 height=304></td>
   </tr>
   <tr>
-    <td><img src="new screenshots/Screenshot_20201023-120240.png" width=144 height=304></td>
+    <td><img src="screenshots/Screenshot_20201023-120240.png" width=144 height=304></td>
   </tr>
  </table>
 
