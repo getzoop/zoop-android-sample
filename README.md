@@ -1,4 +1,4 @@
-# Zoop Client Sample
+# zoop-android-sample
 
 Se você é desenvolvedor (ou tem acesso à uma equipe de desenvolvimento) e deseja criar seu próprio aplicativo para cobranças com mPOS, você pode utilizar este código como base para sua solução.
 
@@ -9,24 +9,15 @@ Por fim, o projeto utiliza nosso SDK de pagamentos Android. Caso note algum prob
 
 ## Configuração
 
-Crie e adicione um arquivo `Credentials.kt` no caminho `/app/src/main/java/com/example/zoopclientsample/` do projeto. 
+Adicione as variávies `MARKETPLACE_ID` e `PUBLISHABLE_KEY` no `local.properties` do projeto com os devidos valores.
 
-Este arquivo deve ser um `Object` respeitando o seguinte formato:
+Exemplo com valores fictícios:
 
 ```
-package com.example.zoopclientsample
+sdk.dir=/Users/zoop/Library/Android/sdk
 
-object Credentials {
-
-    const val MARKETPLACE_ID = {inserir aqui seu markteplaceId}
-
-    const val SELLER_ID = {inserir aqui seu sellerId}
-
-    const val PUBLISHABLE_KEY = {inserir aqui sua publishableKey}
-
-    const val USER_TOKEN = {inserir aqui seu userToken}
-
-}
+MARKETPLACE_ID="0a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p"
+PUBLISHABLE_KEY="                                 "
 ```
 
 Caso tenha dúvidas em relação a essas credenciais entrar em contato com o suporte. 
@@ -36,26 +27,29 @@ Caso tenha dúvidas em relação a essas credenciais entrar em contato com o sup
 
 <table>
   <tr>
-    <td><img src="screenshots/Screenshot_20200415-165820.png" width=144 height=304></td>
-    <td><img src="screenshots/Screenshot_20200415-165830.png" width=144 height=304></td>
-    <td><img src="screenshots/Screenshot_20200415-165851.png" width=144 height=304></td>
+    <td><img src="new screenshots/Screenshot_20201023-115818.png" width=144 height=304></td>
+    <td><img src="new screenshots/Screenshot_20201023-115818.png" width=144 height=304></td>
+    <td><img src="new screenshots/Screenshot_20201023-115818.png" width=144 height=304></td>
   </tr>
   <tr>
-    <td><img src="screenshots/Screenshot_20200415-165917.png" width=144 height=304></td>
-    <td><img src="screenshots/Screenshot_20200415-165925.png" width=144 height=304></td>
-    <td><img src="screenshots/Screenshot_20200415-165932.png" width=144 height=304></td>
+    <td><img src="new screenshots/Screenshot_20201023-115818.png" width=144 height=304></td>
+    <td><img src="new screenshots/Screenshot_20201023-115938.png" width=144 height=304></td>
+    <td><img src="new screenshots/Screenshot_20201023-115946.png" width=144 height=304></td>
   </tr>
   <tr>
-    <td><img src="screenshots/Screenshot_20200415-165940.png" width=144 height=304></td>
-    <td><img src="screenshots/Screenshot_20200415-170014.png" width=144 height=304></td>
-    <td><img src="screenshots/Screenshot_20200415-170030.png" width=144 height=304></td>
+    <td><img src="new screenshots/Screenshot_20201023-115954.png" width=144 height=304></td>
+    <td><img src="new screenshots/Screenshot_20201023-120003.png" width=144 height=304></td>
+    <td><img src="new screenshots/Screenshot_20201023-120233.png" width=144 height=304></td>
+  </tr>
+  <tr>
+    <td><img src="new screenshots/Screenshot_20201023-120240.png" width=144 height=304></td>
   </tr>
  </table>
 
 
 ## Licença
 
-ZoopClientSample está licenciada sob os termos da licença [MIT License](LICENSE) e está disponível gratuitamente.
+zoop-android-sample está licenciada sob os termos da licença [MIT License](LICENSE) e está disponível gratuitamente.
 
 
 ## Links
