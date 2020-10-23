@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Zoop Client Sample</string>
+    <string name="app_name">zoop-android-sample</string>
     <string name="home">home</string>
 
     <string name="sales">Nova Venda</string>
