@@ -4,20 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="150dp"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".view.MainActivity">
+
+    <TextView android:id="@+id/textViewWelcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_message"
+        android:textSize="24sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="105dp"/>
 
     <Button android:id="@+id/buttonSales"
         android:text="@string/sales"
-        style="@style/btnTheme"/>
+        style="@style/btnTheme"
+        android:layout_marginTop="60dp"/>
 
     <Button android:id="@+id/buttonTerminals"
         android:text="@string/terminals"
         style="@style/btnTheme"/>
 
-    <Button android:id="@+id/buttonOthers"
-        android:text="@string/others"
+    <Button android:id="@+id/buttonLogout"
+        android:text="@string/logout"
         style="@style/btnTheme"/>
 
 </LinearLayout>

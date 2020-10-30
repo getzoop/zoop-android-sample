@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChargeActivity">
+    tools:context=".view.ChargeActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
                 android:src="@drawable/logo_zoop_receipt"
                 android:contentDescription="@string/logo_zoop_receipt" />
 
-            <com.example.zoopclientsample.ui.AutoResizeTextView
+            <com.zoop.zoopandroidsample.ui.AutoResizeTextView
                 android:id="@+id/autoResizeTextViewPrintReceipt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

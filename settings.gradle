@@ -1,2 +1,2 @@
-rootProject.name='Zoop Client Sample'
+rootProject.name='zoop-android-sample'
 include ':app'
