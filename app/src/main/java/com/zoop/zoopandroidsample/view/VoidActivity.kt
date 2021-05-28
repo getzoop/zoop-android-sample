@@ -5,27 +5,28 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.zoop.zoopandroidsample.BuildConfig
 import com.zoop.zoopandroidsample.Extras
 import com.zoop.zoopandroidsample.R
 import com.zoop.zoopandroidsample.TransactionStatus
 import com.zoop.zoopandroidsdk.ZoopTerminalVoidPayment
 import com.zoop.zoopandroidsdk.commons.ZLog
-import com.zoop.zoopandroidsdk.terminal.ApplicationDisplayListener
-import com.zoop.zoopandroidsdk.terminal.DeviceSelectionListener
-import com.zoop.zoopandroidsdk.terminal.TerminalMessageType
-import com.zoop.zoopandroidsdk.terminal.VoidTransactionListener
+import com.zoop.zoopandroidsdk.terminal.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 
+private const val TAG = "VoidActivity"
+
 class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransactionListener,
-    DeviceSelectionListener {
+    DeviceSelectionListener, LogInterceptorListener {
 
     private var status = TransactionStatus.READY
     private var joTransactionResponse: JSONObject? = null
@@ -60,13 +61,15 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
             findViewById<ConstraintLayout>(R.id.progressBarLayout).visibility = View.VISIBLE
             hideResponseShowProgressBar()
             terminalVoid = ZoopTerminalVoidPayment()
-            terminalVoid!!.setApplicationDisplayListener(this@VoidActivity)
-            terminalVoid!!.setVoidPaymentListener(this)
+            terminalVoid?.setApplicationDisplayListener(this@VoidActivity)
+            terminalVoid?.setVoidPaymentListener(this)
+            terminalVoid?.logInterceptorListener = this
             status = TransactionStatus.PROCESSING
-            terminalVoid!!.voidTransaction(joTransactionResponse?.getString("id"),
-                resources.getString(R.string.marketplace_id),
+
+            terminalVoid?.voidTransaction(joTransactionResponse?.getString("id"),
+                BuildConfig.marketplace_id,
                 getSellerId(),
-                resources.getString(R.string.publishable_key))
+                BuildConfig.publishable_key)
         }
         findViewById<Button>(R.id.buttonCancelOperation).setOnClickListener {
             finish()
@@ -125,9 +128,9 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
                             TransactionStatus.PROCESSING
                         terminalVoid!!.voidTransaction(
                             joTransactionResponse?.getString("id"),
-                            resources.getString(R.string.marketplace_id),
+                            BuildConfig.marketplace_id,
                             getSellerId(),
-                            resources.getString(R.string.publishable_key))
+                            BuildConfig.publishable_key)
                     }
                     TransactionStatus.PROCESSING -> {
                         status =
@@ -249,6 +252,8 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
         }
     }
 
+    override fun voidPixTransactionList(p0: JSONObject?) {}
+
     private fun showVoidWarnning(applicationMessage: String) {
         hideProgressBarShowResponse()
         ZLog.t(300028, applicationMessage)
@@ -303,5 +308,9 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
     override fun bluetoothIsNotEnabledNotification() {
         val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         mBluetoothAdapter.startDiscovery()
+    }
+
+    override fun dump(log: String?) {
+        Log.i(TAG, "LogIntercept: $log")
     }
 }
