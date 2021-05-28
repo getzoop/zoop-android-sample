@@ -12,10 +12,7 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
-import com.zoop.zoopandroidsample.Extras
-import com.zoop.zoopandroidsample.R
-import com.zoop.zoopandroidsample.ToastHelper
-import com.zoop.zoopandroidsample.TransactionStatus
+import com.zoop.zoopandroidsample.*
 import com.zoop.zoopandroidsdk.ZoopTerminalPayment
 import com.zoop.zoopandroidsdk.commons.ZLog
 import com.zoop.zoopandroidsdk.terminal.*
@@ -23,8 +20,10 @@ import org.json.JSONObject
 import java.math.BigDecimal
 import java.util.*
 
-class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelectionListener,
-    ExtraCardInformationListener, ApplicationDisplayListener {
+private const val TAG = "ChargeActivityLog"
+
+class ChargeActivity : BaseActivity(), TerminalPaymentListener, DeviceSelectionListener,
+    ExtraCardInformationListener, ApplicationDisplayListener, LogInterceptorListener {
 
     private var status = TransactionStatus.READY
     private var terminalPayment: ZoopTerminalPayment? = null
@@ -46,12 +45,14 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
         findViewById<Button>(R.id.buttonCreditOnly).performClick()
         setupSpinner()
         setupActionButton()
+
         try {
             terminalPayment = ZoopTerminalPayment()
             terminalPayment!!.setTerminalPaymentListener(this@ChargeActivity)
             terminalPayment!!.setDeviceSelectionListener(this@ChargeActivity)
             terminalPayment!!.setExtraCardInformationListener(this@ChargeActivity)
-            terminalPayment!!.setApplicationDisplayListener(this@ChargeActivity)
+            terminalPayment?.setApplicationDisplayListener(this@ChargeActivity)
+            terminalPayment?.logInterceptorListener = this
         } catch (e: Exception) {
             Log.e("onClick exception", e.toString());
         }
@@ -60,6 +61,7 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
     private fun setupActionButton() {
         val buttonAction = findViewById<Button>(R.id.buttonAction)
         buttonAction?.let { button ->
+
             button.setOnClickListener {
                 findViewById<ImageView>(R.id.imageViewResponse).visibility = View.GONE
                 findViewById<TextView>(R.id.textViewResponse).visibility = View.GONE
@@ -73,12 +75,14 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                                 )
                             status =
                                 TransactionStatus.PROCESSING
-                            terminalPayment!!.charge(valueToCharge,
+                            terminalPayment!!.charge(
+                                valueToCharge,
                                 paymentOption,
                                 iNumberOfInstallments,
-                                resources.getString(R.string.marketplace_id),
+                                BuildConfig.marketplace_id,
                                 getSellerId(),
-                                resources.getString(R.string.publishable_key))
+                                BuildConfig.publishable_key
+                            )
                         } else {
                             toastHelper?.showToast(getString(R.string.value_error))
                         }
@@ -98,7 +102,10 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                         if (joTransactionResponse != null) {
                             val intent = Intent(this, ReceiptActivity::class.java)
                             val bundle = Bundle()
-                            bundle.putString("joTransactionResponse", joTransactionResponse.toString())
+                            bundle.putString(
+                                "joTransactionResponse",
+                                joTransactionResponse.toString()
+                            )
                             intent.putExtras(bundle)
                             startActivity(intent)
                         }
@@ -111,21 +118,29 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                 }
             }
         }
-
     }
 
     private fun setupSpinner() {
         val spinner = findViewById<Spinner>(R.id.spinnerNumberOfInstallments)
         spinner?.let {
-            val numberOfInstallmentsOpt = arrayOf("1x", "2x ","3x","4x","5x","6x", "7x","8x","9x","10x","11x","12x")
-            val arrayAdapter = ArrayAdapter(this,
-                R.layout.simple_spinner_item, numberOfInstallmentsOpt)
+            val numberOfInstallmentsOpt =
+                arrayOf("1x", "2x ", "3x", "4x", "5x", "6x", "7x", "8x", "9x", "10x", "11x", "12x")
+            val arrayAdapter = ArrayAdapter(
+                this,
+                R.layout.simple_spinner_item, numberOfInstallmentsOpt
+            )
             arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
             it.adapter = arrayAdapter
             it.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View,
+                    position: Int,
+                    id: Long
+                ) {
                     iNumberOfInstallments = position + 1
                 }
+
                 override fun onNothingSelected(parent: AdapterView<*>) {
                     // write code to perform some action
                 }
@@ -138,6 +153,7 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
         val btnCreditOnly = findViewById<Button>(R.id.buttonCreditOnly)
         val btnCreditWithInstallments = findViewById<Button>(R.id.buttonCreditWithInstallments)
         val btnDebit = findViewById<Button>(R.id.buttonDebit)
+
         btnCreditOnly?.let { buttonPressed ->
             buttonPressed.setOnClickListener {
                 spinner.setSelection(0)
@@ -147,6 +163,7 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                 paymentOption = ZoopTerminalPayment.CHARGE_TYPE_CREDIT
             }
         }
+
         btnCreditWithInstallments?.let { buttonPressed ->
             buttonPressed.setOnClickListener {
                 spinner.setSelection(1)
@@ -156,6 +173,7 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                 paymentOption = ZoopTerminalPayment.CHARGE_TYPE_CREDIT_WITH_INSTALLMENTS
             }
         }
+
         btnDebit?.let { buttonPressed ->
             buttonPressed.setOnClickListener {
                 spinner.setSelection(0)
@@ -167,18 +185,25 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
         }
     }
 
-    private fun updateButtons(buttonPressed: Button, buttonUnpressed: Button, buttonUnpressedTwo: Button) {
+    private fun updateButtons(
+        buttonPressed: Button,
+        buttonUnpressed: Button,
+        buttonUnpressedTwo: Button
+    ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             buttonPressed.backgroundTintList =
-                ContextCompat.getColorStateList(this,
+                ContextCompat.getColorStateList(
+                    this,
                     R.color.colorAccentAlt
                 )
             buttonUnpressed.backgroundTintList =
-                ContextCompat.getColorStateList(this,
+                ContextCompat.getColorStateList(
+                    this,
                     R.color.colorPrimaryAlt
                 )
             buttonUnpressedTwo.backgroundTintList =
-                ContextCompat.getColorStateList(this,
+                ContextCompat.getColorStateList(
+                    this,
                     R.color.colorPrimaryAlt
                 )
         }
@@ -187,10 +212,16 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
     private fun setupEditText() {
         val editTextValueToCharge = findViewById<EditText>(R.id.editTextValueToCharge)
         editTextValueToCharge?.let {
-            it.addTextChangedListener(object: TextWatcher {
+            it.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {}
 
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if (s.toString() != sValueToCharge) {
@@ -217,7 +248,10 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                 hideProgressBarShowResponse()
                 setResponseImageView(R.drawable.icon_approved, "#006400")
                 if (joResponse != null) {
-                    setResponseTextView(resources.getString(R.string.text_transaction_step4_approved), "#006400")
+                    setResponseTextView(
+                        resources.getString(R.string.text_transaction_step4_approved),
+                        "#006400"
+                    )
                     joTransactionResponse = joResponse
                     findViewById<Button>(R.id.buttonAction).text = resources.getString(
                         R.string.charge_button_receipt_label
@@ -239,21 +273,19 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
         )
     }
 
-    override fun paymentDuplicated(joResponse: JSONObject?) {
-        runOnUiThread {
-            status = TransactionStatus.READY
-            showPaymentWarnning(resources.getString(R.string.text_transaction_step5_duplicated))
-        }
-    }
-
     override fun currentChargeCanBeAbortedByUser(canAbortCurrentCharge: Boolean) {
         runOnUiThread {
             findViewById<Button>(R.id.buttonAction).isEnabled = canAbortCurrentCharge
         }
     }
 
-    override fun signatureResult(p0: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun signatureResult(p0: Int) {}
+
+    override fun pixPaymentSuccessful(jsonObject: JSONObject?) {
+
+    }
+
+    override fun pixPaymentFailed(jsonObject: JSONObject?) {
     }
 
     override fun paymentAborted() {
@@ -264,7 +296,6 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
     }
 
     override fun cardholderSignatureRequested() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     private fun hideProgressBarShowResponse() {
@@ -303,7 +334,8 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                     var applicationMessage = ""
                     if (joResponse.has("response_code")) {
                         if (joResponse.getString("response_code") == "8781013") {
-                            applicationMessage = resources.getString(R.string.label_title_error_brand)
+                            applicationMessage =
+                                resources.getString(R.string.label_title_error_brand)
                         }
                     }
                     if (joResponse.has("error")) {
@@ -374,12 +406,20 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
         }
     }
 
-    override fun showMessage(stringMessage: String?, messageType: TerminalMessageType?, sExplanation: String?) {
+    override fun showMessage(
+        stringMessage: String?,
+        messageType: TerminalMessageType?,
+        sExplanation: String?
+    ) {
         runOnUiThread {
             findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
             val textViewProgressBar = findViewById<TextView>(R.id.textViewProgressBar)
             textViewProgressBar.visibility = View.VISIBLE
             textViewProgressBar.text = stringMessage
         }
+    }
+
+    override fun dump(log: String?) {
+        Log.i(TAG, "LogIntercept: $log")
     }
 }
