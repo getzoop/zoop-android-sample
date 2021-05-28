@@ -7,10 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import com.zoop.zoopandroidsample.Constants
-import com.zoop.zoopandroidsample.Preferences
-import com.zoop.zoopandroidsample.R
-import com.zoop.zoopandroidsample.ToastHelper
+import com.zoop.zoopandroidsample.*
 import com.zoop.zoopandroidsample.api.*
 import com.zoop.zoopandroidsdk.commons.ZLog
 import org.json.JSONException
@@ -75,7 +72,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun executeLogin(sUsername: String, sPassword: String) {
         val loginCall =
-            getLoginService()!!.login(resources.getString(R.string.marketplace_id), LoginRequest(sUsername, sPassword, true))
+            getLoginService()!!.login(BuildConfig.marketplace_id, LoginRequest(sUsername, sPassword, true))
         loginCall!!.enqueue(object : Callback<LoginResponse?> {
             override fun onResponse(
                 call: Call<LoginResponse?>,
