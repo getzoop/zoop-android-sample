@@ -55,4 +55,4 @@ zoop-android-sample está licenciada sob os termos da licença [MIT License](LIC
 ## Links
 
 * [Docs](https://docs.zoop.co/docs/sdk-android-1)
-* [Suporte](suporte@zoop.com.br)
+* [Suporte](mailto:suporte@zoop.com.br)
