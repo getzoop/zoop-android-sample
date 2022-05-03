@@ -18,6 +18,7 @@ sdk.dir=/Users/zoop/Library/Android/sdk
 
 MARKETPLACE_ID="0a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p"
 PUBLISHABLE_KEY="                                 "
+BASE_URL="API_ZOOP"
 ```
 
 Caso tenha dúvidas em relação a essas credenciais entrar em contato com o suporte. 
