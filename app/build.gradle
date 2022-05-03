@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.zoop.zoopandroidsample"
-        minSdkVersion 18
+        minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
         versionName "1.0.0"
@@ -20,8 +20,9 @@ android {
         debug {
             def localProperties = new Properties()
             localProperties.load(new FileInputStream(rootProject.file("local.properties")))
-            resValue("string", "marketplace_id", localProperties['MARKETPLACE_ID'])
-            resValue("string", "publishable_key", localProperties['PUBLISHABLE_KEY'])
+            buildConfigField('String', 'marketplace_id', localProperties['MARKETPLACE_ID'])
+            buildConfigField('String', 'publishable_key', localProperties['PUBLISHABLE_KEY'])
+            buildConfigField('String', 'BASE_URL', localProperties['BASE_URL'])
         }
         release {
             minifyEnabled false
@@ -29,13 +30,22 @@ android {
         }
     }
 
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.aar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.2.0'
+    implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'com.karumi:dexter:5.0.0'
@@ -52,6 +62,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
+    implementation 'com.google.android.gms:play-services-location:12.0.0'
 
-    implementation files('libs/zoop_emv_android_sdk_2.0.8_prod.jar')
 }
