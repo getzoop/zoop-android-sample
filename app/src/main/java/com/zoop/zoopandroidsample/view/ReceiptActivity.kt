@@ -11,6 +11,7 @@ import com.zoop.zoopandroidsample.api.ReceiptService
 import com.zoop.zoopandroidsample.api.RetrofitInstance
 import com.zoop.zoopandroidsample.ui.AutoResizeTextView
 import com.google.gson.Gson
+import com.zoop.zoopandroidsample.BuildConfig
 import com.zoop.zoopandroidsdk.commons.ZLog
 import com.zoop.zoopandroidsdk.terminal.ReceiptDeliveryListener
 import org.json.JSONException
@@ -46,9 +47,7 @@ class ReceiptActivity : BaseActivity(), ReceiptDeliveryListener {
         val receiptService: ReceiptService? =
             RetrofitInstance.retrofitInstance?.create(ReceiptService::class.java)
         val receiptCall =
-            receiptService!!.getReceipt("Bearer ${getUserToken()}", resources.getString(
-                R.string.marketplace_id
-            ), receiptId)
+            receiptService!!.getReceipt("Bearer ${getUserToken()}", BuildConfig.marketplace_id, receiptId)
         receiptCall!!.enqueue(object : Callback<Any?> {
             override fun onResponse(
                 call: Call<Any?>,

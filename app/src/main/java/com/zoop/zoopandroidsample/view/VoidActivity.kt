@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.zoop.zoopandroidsample.BuildConfig
 import com.zoop.zoopandroidsample.Extras
 import com.zoop.zoopandroidsample.R
 import com.zoop.zoopandroidsample.TransactionStatus
@@ -63,10 +64,12 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
             terminalVoid!!.setApplicationDisplayListener(this@VoidActivity)
             terminalVoid!!.setVoidPaymentListener(this)
             status = TransactionStatus.PROCESSING
-            terminalVoid!!.voidTransaction(joTransactionResponse?.getString("id"),
-                resources.getString(R.string.marketplace_id),
+            terminalVoid!!.voidTransaction(
+                joTransactionResponse?.getString("id"),
+                BuildConfig.marketplace_id,
                 getSellerId(),
-                resources.getString(R.string.publishable_key))
+                BuildConfig.publishable_key
+            )
         }
         findViewById<Button>(R.id.buttonCancelOperation).setOnClickListener {
             finish()
@@ -75,7 +78,11 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
 
     private fun setParamsVoidQuestion(valueWithCurrency: String, first4digitsCardNumber: String) {
         findViewById<TextView>(R.id.textViewTransactionToVoidQuestion).text =
-            resources.getString(R.string.dialog_void_receipt_transaction_text_confirm_void, valueWithCurrency, first4digitsCardNumber)
+            resources.getString(
+                R.string.dialog_void_receipt_transaction_text_confirm_void,
+                valueWithCurrency,
+                first4digitsCardNumber
+            )
     }
 
     private fun showTransactionToVoidDetails(joTransactionResponse: JSONObject) {
@@ -125,9 +132,10 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
                             TransactionStatus.PROCESSING
                         terminalVoid!!.voidTransaction(
                             joTransactionResponse?.getString("id"),
-                            resources.getString(R.string.marketplace_id),
+                            BuildConfig.marketplace_id,
                             getSellerId(),
-                            resources.getString(R.string.publishable_key))
+                            BuildConfig.publishable_key
+                        )
                     }
                     TransactionStatus.PROCESSING -> {
                         status =
@@ -191,7 +199,10 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
                 hideProgressBarShowResponse()
                 setResponseImageView(R.drawable.icon_approved, "#006400")
                 if (joResponse != null) {
-                    setResponseTextView(resources.getString(R.string.text_void_transaction_step4_approved), "#006400")
+                    setResponseTextView(
+                        resources.getString(R.string.text_void_transaction_step4_approved),
+                        "#006400"
+                    )
                     joVoidResponse = joResponse
                     findViewById<Button>(R.id.buttonAction).text = resources.getString(
                         R.string.charge_button_receipt_label
@@ -217,7 +228,8 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
                     var applicationMessage = ""
                     if (joResponse.has("response_code")) {
                         if (joResponse.getString("response_code") == "8781013") {
-                            applicationMessage = resources.getString(R.string.label_title_error_brand)
+                            applicationMessage =
+                                resources.getString(R.string.label_title_error_brand)
                         }
                     }
                     if (joResponse.has("error")) {
@@ -249,6 +261,10 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
         }
     }
 
+    override fun voidPixTransactionList(p0: JSONObject?) {
+        TODO("Not yet implemented")
+    }
+
     private fun showVoidWarnning(applicationMessage: String) {
         hideProgressBarShowResponse()
         ZLog.t(300028, applicationMessage)
@@ -278,7 +294,11 @@ class VoidActivity : BaseActivity(), ApplicationDisplayListener, VoidTransaction
         }
     }
 
-    override fun showMessage(message: String?, messageType: TerminalMessageType?, explanationMessage: String?) {
+    override fun showMessage(
+        message: String?,
+        messageType: TerminalMessageType?,
+        explanationMessage: String?
+    ) {
         runOnUiThread {
             findViewById<TextView>(R.id.textViewProgressBar).text = message
         }

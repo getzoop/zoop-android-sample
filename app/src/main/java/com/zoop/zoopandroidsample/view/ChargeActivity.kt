@@ -12,10 +12,7 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
-import com.zoop.zoopandroidsample.Extras
-import com.zoop.zoopandroidsample.R
-import com.zoop.zoopandroidsample.ToastHelper
-import com.zoop.zoopandroidsample.TransactionStatus
+import com.zoop.zoopandroidsample.*
 import com.zoop.zoopandroidsdk.ZoopTerminalPayment
 import com.zoop.zoopandroidsdk.commons.ZLog
 import com.zoop.zoopandroidsdk.terminal.*
@@ -75,10 +72,8 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
                                 TransactionStatus.PROCESSING
                             terminalPayment!!.charge(valueToCharge,
                                 paymentOption,
-                                iNumberOfInstallments,
-                                resources.getString(R.string.marketplace_id),
-                                getSellerId(),
-                                resources.getString(R.string.publishable_key))
+                                iNumberOfInstallments,BuildConfig.marketplace_id,
+                                getSellerId(), BuildConfig.publishable_key)
                         } else {
                             toastHelper?.showToast(getString(R.string.value_error))
                         }
@@ -239,7 +234,7 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
         )
     }
 
-    override fun paymentDuplicated(joResponse: JSONObject?) {
+    fun paymentDuplicated(joResponse: JSONObject?) {
         runOnUiThread {
             status = TransactionStatus.READY
             showPaymentWarnning(resources.getString(R.string.text_transaction_step5_duplicated))
@@ -254,6 +249,14 @@ class ChargeActivity : BaseActivity() , TerminalPaymentListener, DeviceSelection
 
     override fun signatureResult(p0: Int) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun pixPaymentSuccessful(p0: JSONObject?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun pixPaymentFailed(p0: JSONObject?) {
+        TODO("Not yet implemented")
     }
 
     override fun paymentAborted() {
