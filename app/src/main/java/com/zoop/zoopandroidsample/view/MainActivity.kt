@@ -18,7 +18,7 @@ class MainActivity : BaseActivity() {
 
             setContentView(R.layout.activity_main)
 
-            ZoopAPI.initialize(application)
+            ZoopAPI.initialize(this)
 
             mountWelcomeMessage()
 
