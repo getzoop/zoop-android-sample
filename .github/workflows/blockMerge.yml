@@ -1,0 +1,13 @@
+name: Dependabot Security Check
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-dependabot:
+    uses: getzoop/gha-workflows/.github/workflows/dependabot_alerts_check.yml@v5
+    secrets:
+      dependabot-token: ${{ secrets.GH_TKN_DEPENDA }} 
