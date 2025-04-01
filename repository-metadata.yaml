@@ -1,0 +1,28 @@
+apiVersion: ifood/v2.1
+kind: Repository
+tags:
+- api
+spec:
+  contents:
+  - name: zp-cpp-pos-template
+    description: Template para projetos C++ do time de POS
+    type: service
+    ownerLayerSlug: zpp
+    subType:
+    - api
+    impactLevel: 3
+    deployment:
+      type: k8s_helm
+    certifications:
+    - name: irc-mtdt
+      version: v2.1
+    links:
+    - type: logs
+      title: Datadog - Logs
+      href: https://app.datadoghq.com/logs?query=service%3Acpp-pos-template
+    - type: other
+      title: Tompero - Slug
+      href: https://tompero.ifoodcorp.com.br/catalog/default/group/zoop
+    - type: docs
+      title: Metadata - Confluence
+      href: https://ifood.atlassian.net/wiki/spaces/EN/pages/1331003434/IRC-MTDT+v2.1.0+Metadata+Standard
